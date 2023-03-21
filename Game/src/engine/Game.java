@@ -17,12 +17,12 @@ import model.world.Cell;
 
 public class Game {
 	
-	public static ArrayList<Hero> availableHeros =  new ArrayList<Hero>();
-	public static ArrayList<Hero> heros = new ArrayList<Hero>();
+	public static ArrayList<Hero> availableHeroes =  new ArrayList<Hero>();
+	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	public static Cell [][] map;
 	
-	public static void loadHeros(String filePath) throws IOException { //check order of parameters
+	public static void loadHeroes(String filePath) throws IOException { //check order of parameters
 		//parsing a CSV file into Scanner class constructor
 		File f = new File(filePath);
 		BufferedReader csvReader = new BufferedReader(new FileReader(f));
@@ -33,17 +33,17 @@ public class Game {
 			switch (hero[1]){
 			case "FIGH":
 				h = new Fighter(hero[0], Integer.parseInt(hero[2]), Integer.parseInt(hero[4]), Integer.parseInt(hero[3]));
-				availableHeros.add(h);
+				availableHeroes.add(h);
 				break;
 				
 			case "MED":
 				h = new Medic(hero[0], Integer.parseInt(hero[2]), Integer.parseInt(hero[4]), Integer.parseInt(hero[3]));
-				availableHeros.add(h);
+				availableHeroes.add(h);
 				break;
 			
 			case "EXP":
 				h = new Explorer(hero[0], Integer.parseInt(hero[2]), Integer.parseInt(hero[4]), Integer.parseInt(hero[3]));
-				availableHeros.add(h);
+				availableHeroes.add(h);
 				break;	
 			}
 			
@@ -63,11 +63,10 @@ public class Game {
 		
 			
 		
-	// hello Nadeem
 	
 	public static void main(String[] args){
 		try {
-			loadHeros("C:\\Users\\nalaa\\eclipse-workspace\\Game\\src\\engine\\Heros.csv");
+			loadHeroes("C:\\Users\\nalaa\\eclipse-workspace\\Game\\src\\engine\\Heros.csv");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e1) {
@@ -76,7 +75,7 @@ public class Game {
 		
 		
 		
-			System.out.println(availableHeros.get(0).getName());   //check order of parameter from csv file
+		/*	System.out.println(availableHeros.get(0).getName());   //check order of parameter from csv file
 			System.out.println(availableHeros.get(0).getMaxHp());
 			System.out.println(availableHeros.get(0).getMaxActions());
 			System.out.println(availableHeros.get(0).getAttackDmg());
@@ -89,7 +88,7 @@ public class Game {
 			System.out.println(availableHeros.get(2).getName());
 			System.out.println(availableHeros.get(2).getMaxHp());
 			System.out.println(availableHeros.get(2).getMaxActions());
-			System.out.println(availableHeros.get(2).getAttackDmg());
+			System.out.println(availableHeros.get(2).getAttackDmg());*/
 	
 		
 	}}

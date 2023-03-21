@@ -9,13 +9,13 @@ public class Hero extends Character{
 	private int actionsAvailable;
 	private int maxActions;
 	private boolean specialAction;
-	private ArrayList<Vaccine> vaccineInventory;
-	private ArrayList<Supply> supplyInventory;
-	protected Hero(){
+	private ArrayList<Vaccine> vaccineInventory=new ArrayList<Vaccine>();
+	private ArrayList<Supply> supplyInventory=new ArrayList<Supply>();
+	/*protected Hero(){
 		throw new UnsupportedOperationException("Class Instantiation not supported");
-	}
+	}*/
 	
-	protected Hero(String name, int maxHp, int attackDmg, int maxActions) {
+	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
 		this.maxActions = maxActions;
 		this.actionsAvailable = maxActions;
@@ -33,7 +33,7 @@ public class Hero extends Character{
 		return this.maxActions;
 	}
 	
-	public boolean getSpecialAction() {
+	public boolean isSpecialAction() {
 		return this.specialAction;
 	}
 	

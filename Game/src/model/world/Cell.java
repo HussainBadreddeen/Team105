@@ -1,16 +1,16 @@
 package model.world;
 
-public class Cell {
+abstract public class Cell {
 	private boolean isVisible;
-	protected Cell() {
-		throw new UnsupportedOperationException("Class Instantiation not supported");
+	public Cell() {
+		//throw new UnsupportedOperationException("Class Instantiation not supported");
 	}
 	
-	public boolean getIsVisible() {
+	public boolean isVisible() {
 		return this.isVisible;
 	}
 	
-	public void setIsVisible(boolean isVisible) {
+	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
 	
