@@ -1,6 +1,5 @@
 package model.world;
 
-import model.characters.Hero;
 import model.characters.Character;
 
 public class CharacterCell extends Cell {
@@ -8,7 +7,6 @@ public class CharacterCell extends Cell {
 	private boolean isSafe;
 	
 	public CharacterCell(Character character) {
-		super();
 		this.character = character;
 	}
 	
@@ -22,7 +20,7 @@ public class CharacterCell extends Cell {
 	}
 	
 	public boolean isSafe() {
-		return isSafe;
+		return this.isSafe;
 	}
 	
 	public void setSafe(boolean isSafe) {

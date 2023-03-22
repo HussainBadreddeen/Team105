@@ -26,7 +26,7 @@ abstract public class Character {
 	}
 		
 	public Point getLocation() {
-		return location;
+		return this.location;
 	}
 
 	public void setLocation(Point location) {

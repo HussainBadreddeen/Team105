@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
-public class Hero extends Character{
+abstract public class Hero extends Character{
 	private int actionsAvailable;
 	private int maxActions;
 	private boolean specialAction;
 	private ArrayList<Vaccine> vaccineInventory=new ArrayList<Vaccine>();
 	private ArrayList<Supply> supplyInventory=new ArrayList<Supply>();
-	/*protected Hero(){
-		throw new UnsupportedOperationException("Class Instantiation not supported");
-	}*/
+	
 	
 	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
@@ -33,7 +31,7 @@ public class Hero extends Character{
 		return this.maxActions;
 	}
 	
-	public boolean isSpecialAction() {
+	public boolean isSpecialAction() {     //if boolean, use is instead of get before method
 		return this.specialAction;
 	}
 	

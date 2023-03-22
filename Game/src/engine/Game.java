@@ -1,13 +1,10 @@
 package engine;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import model.characters.Explorer;
 import model.characters.Fighter;
 import model.characters.Hero;
@@ -22,7 +19,7 @@ public class Game {
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	public static Cell [][] map;
 	
-	public static void loadHeroes(String filePath) throws IOException { //check order of parameters
+	public static void loadHeroes(String filePath) throws Exception { //check order of parameters
 		//parsing a CSV file into Scanner class constructor
 		File f = new File(filePath);
 		BufferedReader csvReader = new BufferedReader(new FileReader(f));
@@ -49,7 +46,7 @@ public class Game {
 			
 			}
 		
-		
+		csvReader.close();
 		}
 		 
 		
@@ -67,10 +64,8 @@ public class Game {
 	public static void main(String[] args){
 		try {
 			loadHeroes("C:\\Users\\nalaa\\eclipse-workspace\\Game\\src\\engine\\Heros.csv");
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		}
 		
 		
