@@ -22,7 +22,7 @@ public class Game {
 	public static void loadHeroes(String filePath) throws Exception { //check order of parameters
 		//parsing a CSV file into Scanner class constructor
 		File f = new File(filePath);
-		BufferedReader csvReader = new BufferedReader(new FileReader(f));
+		BufferedReader csvReader = new BufferedReader(new FileReader(f));//citaion:https://www.javatpoint.com/how-to-read-csv-file-in-java
 		String row;
 		while ((row = csvReader.readLine()) != null) {
 			String[] hero = row.split(",");
