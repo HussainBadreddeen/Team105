@@ -16,7 +16,7 @@ abstract public class Hero extends Character{
 	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
 		this.maxActions = maxActions;
-		this.actionsAvailable = actionsAvailable;
+		this.actionsAvailable = maxActions;
 	}
 	
 	public int getActionsAvailable() {
