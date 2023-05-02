@@ -1,5 +1,4 @@
 package model.world;
-
 import model.collectibles.Collectible;
 
 public class CollectibleCell extends Cell {
@@ -12,4 +11,6 @@ public class CollectibleCell extends Cell {
 	public Collectible getCollectible() {
 		return this.collectible;
 	}
+	
+
 }

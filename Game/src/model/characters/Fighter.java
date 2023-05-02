@@ -8,5 +8,30 @@ public class Fighter extends Hero{
 	}
 	
 	
+	public void attack() {
+		super.attack();
+		this.setActionsAvailable(this.getActionsAvailable() + 1);
+		}
+	
+	/*public void attack() {             //for future use if necessary
+		if (this.isSpecialAction()) {
+			if (this.getActionsAvailable() == 0) {
+				//NotEnoughActionsException
+			}
+			
+			else if (this.getTarget() instanceof Hero) {
+				//InvalidTargetException
+			}
+			else {
+				super.attack();
+			}
+		}
+		
+		else {
+			super.attack();
+		}
+	}*/
+	
+	
 	
 }
