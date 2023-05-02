@@ -87,7 +87,7 @@ abstract public class Character { //convention public abstract not abstract publ
 		Point l = this.getLocation();
 		int x = (int)(l.getX());
 		int y = (int)(l.getY());
-		Game.map[14 - y][x] = null;
+		Game.map[14 - y][x] = null;//check later
 		}
 		
 	

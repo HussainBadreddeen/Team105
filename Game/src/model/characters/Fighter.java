@@ -10,7 +10,7 @@ public class Fighter extends Hero{
 	
 	public void attack() {
 		super.attack();
-		this.setActionsAvailable(this.getActionsAvailable() + 1);
+		this.setActionsAvailable(this.getActionsAvailable() + 1); //gui hyzeed w y2l by 1 bsor3a hmm
 		}
 	
 	/*public void attack() {             //for future use if necessary

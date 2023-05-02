@@ -84,6 +84,10 @@ abstract public class Hero extends Character{
 		if (this.getSupplyInventory() == null) {
 			//throw NoAvaialableResourcesException
 	}
+		else {
+			//code for using it. case for each hero
+			this.specialAction = false;//no longer has special action after using
+		}
 		
 		
 		
