@@ -1,5 +1,9 @@
 package model.characters;
 
+import exceptions.GameActionException;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+
 public class Fighter extends Hero{
 
 	
@@ -8,29 +12,35 @@ public class Fighter extends Hero{
 	}
 	
 	
-	public void attack() {
-		super.attack();
-		this.setActionsAvailable(this.getActionsAvailable() + 1); //gui hyzeed w y2l by 1 bsor3a hmm
-		}
+	/*public void attack() throws NotEnoughActionsException {
+		
+		try {
+			super.attack();
+			if (this.isSpecialAction())
+				this.setActionsAvailable(this.getActionsAvailable() + 1);
+			}
+		catch(GameActionException e) {
+				
+			}
+		
+		}*/
 	
-	/*public void attack() {             //for future use if necessary
+	public void attack() throws NotEnoughActionsException { //for future use if necessary
 		if (this.isSpecialAction()) {
 			if (this.getActionsAvailable() == 0) {
-				//NotEnoughActionsException
+				throw new NotEnoughActionsException();
 			}
 			
-			else if (this.getTarget() instanceof Hero) {
-				//InvalidTargetException
-			}
 			else {
-				super.attack();
+				try {
+				super.attack();}
+				catch(GameActionException e) {
+					
+				}
 			}
 		}
 		
-		else {
-			super.attack();
-		}
-	}*/
+	}
 	
 	
 	

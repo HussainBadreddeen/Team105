@@ -24,7 +24,7 @@ public class Supply implements Collectible {
 	
 	@Override
 	public void use(Hero h) throws NoAvailableResourcesException {
-		h.removeSupply(this);
+		h.removeSupply();
 		
 		
 		/*if(h.isSpecialAction()== true){//represents if the hero has used his special action.

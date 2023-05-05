@@ -1,4 +1,3 @@
-/exceptions/
-/model/
 /tests/
-/views/
+/engine/
+/model/

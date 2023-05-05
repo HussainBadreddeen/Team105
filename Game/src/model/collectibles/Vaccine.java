@@ -42,7 +42,7 @@ public class Vaccine implements Collectible{
 
 	@Override
 	public void use(Hero h) throws NoAvailableResourcesException {//player can only win the game once all vaccines have been collected and used
-		h.removeVaccine(this);// cure zombies and recruit new heroes here?
+		h.removeVaccine();// cure zombies and recruit new heroes here?
 		this.useCount += 1;
 		//System.out.println("choose: FIGH,MED,EXP");//player by choose akeed sah? N:takes from availableHeroes probably
 		//create enum w y choose meno?
