@@ -33,7 +33,8 @@ public class Fighter extends Hero{
 			
 			else {
 				try {
-				super.attack();}
+				super.attack();
+				}
 				catch(GameActionException e) {
 					
 				}

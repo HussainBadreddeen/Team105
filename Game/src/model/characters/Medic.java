@@ -1,5 +1,4 @@
 package model.characters;
-
 import exceptions.*;
 
 public class Medic extends Hero {

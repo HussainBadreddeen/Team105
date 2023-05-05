@@ -3,20 +3,11 @@ package model.characters;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
-
 import engine.Game;
-import exceptions.GameActionException;
-import exceptions.InvalidTargetException;
-import exceptions.MovementException;
-import exceptions.NoAvailableResourcesException;
-import exceptions.NotEnoughActionsException;
-import model.collectibles.Collectible;
-import model.collectibles.Supply;
-import model.collectibles.Vaccine;
-import model.world.Cell;
-import model.world.CharacterCell;
-import model.world.CollectibleCell;
-import model.world.TrapCell;
+import exceptions.*;
+import model.collectibles.*;
+import model.world.*;
+
 
 abstract public class Hero extends Character{
 	private int actionsAvailable;

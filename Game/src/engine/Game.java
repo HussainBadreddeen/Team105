@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import model.characters.*; //we can use this instead of importing each indvidually
-import model.characters.Character;
+import model.characters.Character;//for some reason we need this bec. the one above isnt working 
 import model.collectibles.*;
 import model.world.*;
 import exceptions.*;
@@ -67,87 +67,63 @@ public class Game {
 			map = new Cell[15][15]; //MAP BAYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAA IF I REMOVE THIS IT STILL PRODUCES THE SAME ERRORS AND FAILURES
 			heroes.add(h);
 			availableHeroes.remove(h);
-			h.setLocation(new Point(0, 0));
+			Point l =new Point(0, 0);
+			h.setLocation(l);
 			map[0][0] = new CharacterCell(h);
+
+			for (int i = 0; i < 5; i++) {//5 vaccines rnd locations
+				int x;
+				int y;
+					x = randomPosition();
+					y = randomPosition();
+				
+					if(map[y][x]==null) {// if cell is null then mfeehash haga
+						map[y][x] = new CollectibleCell(new Vaccine());
+					}
+		}
 			
-			for (int i = 0; i < 15; i++) {
+			for (int i = 0; i < 5; i++) {//5 supplies rnd locations
+				int x;
+				int y;
+					x = randomPosition();
+					y = randomPosition();
+		
+				if(map[y][x]==null) {// if cell is null then mfeehash haga
+					map[y][x] = new CollectibleCell(new Supply());
+				}
+			}
+			
+			for (int i = 0; i < 5; i++) { //5 traps rnd locations
+				int x;
+				int y;
+					x = randomPosition();
+					y = randomPosition();
+		
+				if(map[y][x]==null) {// if cell is null then mfeehash haga
+					map[y][x] = new TrapCell();
+				}
+			}
+			
+			for (int i = 0; i < 10; i++) {//5 Zombies rnd locations
+				int x;
+				int y;
+				x = randomPosition();
+				y = randomPosition();
+				if(map[y][x]==null) {// if cell is null then mfeehash haga
+					Zombie z = new Zombie();
+					map[y][x] = new CharacterCell(z);
+					z.setLocation(new Point(y, x));
+					zombies.add(z);
+				}
+			}
+			
+			for (int i = 0; i < 15; i++) {// anything else intialize charachter cell
 				for (int j = 0; j < 15; j++) {
+					if(map[i][j]==null) {
 					map[i][j] = new CharacterCell(null);
 				}
+					}
 			}
-			
-			for (int i = 0; i < 5; i++) {
-				int x;
-				int y;
-				boolean flag = true;
-				do {
-					x =  randomPosition();
-					y = randomPosition();
-					if (map[y][x] instanceof CharacterCell) {
-						if (((CharacterCell)(map[y][x])).getCharacter() == null)
-							flag = false;
-						
-					}}
-				while (flag);/*|| (y == 0 && x == 0)*/ //hero pos can be place in while condition
-				map[y][x] = new CollectibleCell(new Vaccine());
-				
-			}
-			
-			for (int i = 0; i < 5; i++) {
-				int x;
-				int y;
-				boolean flag = true;
-				do {
-					x =  randomPosition();
-					y = randomPosition();
-					if (map[y][x] instanceof CharacterCell) {
-						if (((CharacterCell)(map[y][x])).getCharacter() == null)
-							flag = false;
-						
-					}}
-				while (flag);
-				map[y][x] = new CollectibleCell(new Supply());
-				
-			}
-			
-			for (int i = 0; i < 5; i++) {
-				int x;
-				int y;
-				boolean flag = true;
-				do {
-					x =  randomPosition();
-					y = randomPosition();
-					if (map[y][x] instanceof CharacterCell) {
-						if (((CharacterCell)(map[y][x])).getCharacter() == null)
-							flag = false;
-					}	
-				}
-				while (flag);
-				
-				map[y][x] = new TrapCell();
-				
-			}
-			
-			for (int i = 0; i < 10; i++) {
-				int x;
-				int y;
-				boolean flag = true;
-				do {
-					x =  randomPosition();
-					y = randomPosition();
-					if (map[y][x] instanceof CharacterCell) {
-						if (((CharacterCell)(map[y][x])).getCharacter() == null)
-							flag = false;
-						
-					}}
-				while (flag);
-				
-				Zombie z = new Zombie();
-				z.setLocation(new Point(y, x));
-				zombies.add(z);
-				map[y][x] = new CharacterCell(z);
-				
-				}
 			
 			
 		} 
@@ -158,7 +134,7 @@ public class Game {
 		}
 		
 		public static boolean checkGameOver() {
-			return (checkWin() || (heroes.size() == 0));
+			return (checkWin() || (heroes.size()==0));
 			
 		}
 		public static void endTurn() {
@@ -188,16 +164,17 @@ public class Game {
                     x = Game.randomPosition();
                     y = Game.randomPosition();
                     if (Game.map[y][x] instanceof CharacterCell) {
-                        if (((CharacterCell)(Game.map[14-y][x])).getCharacter() == null)
+                        if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
                             flag = false;
 
                     }}
                 while (flag);
 
                 Zombie z = new Zombie();
+                Game.map[y][x] = new CharacterCell(z);
                 z.setLocation(new Point(y, x));
                 Game.zombies.add(z);
-                Game.map[y][x] = new CharacterCell(z);
+              
             }
 
             setAllCellVisbility(false);
@@ -224,10 +201,14 @@ public class Game {
 		  
 			 
 			public static void main(String args[]) {
+				
 				Character c =  new Fighter("n", 200, 10, 5);
+				
 				Character z =  new Zombie();
 				startGame(new Fighter("n", 200, 10, 5));
+				
 				Point l = new Point(0, 0);
+				c.isCharacterAtLocation(l);
 				Point l2 = new Point(13, 0);
 				c.setLocation(l);
 				z.setLocation(l2);
@@ -240,7 +221,7 @@ public class Game {
 					
 				}
 					
-				System.out.println(count);
+				System.out.println(c.isCharacterAtLocation(l));//true y3ny f el makan el sa7 ehhhh b2aaaa
 				
 				//((Hero)c).move(Direction.DOWN);
 				//System.out.println(c.getLocation().getX() + " " + c.getLocation().getY());

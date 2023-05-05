@@ -1,8 +1,6 @@
 package model.collectibles;
 
-import java.awt.Point;
-
-import exceptions.NoAvailableResourcesException;
+import exceptions.*;//looks cleaner with *
 import model.characters.*;
 
 public interface Collectible {

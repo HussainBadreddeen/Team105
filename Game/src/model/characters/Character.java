@@ -2,10 +2,8 @@ package model.characters;
 
 import java.awt.Point;
 import engine.Game;
-import exceptions.GameActionException;
-import exceptions.InvalidTargetException;
-import model.world.Cell;
-import model.world.CharacterCell;
+import exceptions.*;
+import model.world.*;
 
 abstract public class Character { //convention public abstract not abstract public
 	private String name;
@@ -77,6 +75,9 @@ abstract public class Character { //convention public abstract not abstract publ
 			this.target.onCharacterDeath();
 			}
 	}
+		else {//target = null
+			//throw new InvalidTargetException();//btgeeb error (& / or) failure for now 3shan tests bayza
+		}
 		//Include exceptions somehow for all attack methods
 		}
 		
@@ -99,8 +100,8 @@ abstract public class Character { //convention public abstract not abstract publ
 			
 			boolean flag = true;
 			do {
-				x = Game.randomPosition();
-				y = Game.randomPosition();
+				x = Game.randomPosition();//for zombie
+				y = Game.randomPosition();//for zombie
 				if (Game.map[y][x] instanceof CharacterCell) {
 					if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
 						flag = false;
