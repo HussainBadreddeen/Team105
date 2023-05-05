@@ -1,0 +1,43 @@
+when does a turn end ~ finish with all heroes first?
+
+do i have to use all my availableactions
+
+automatic pickup of collectibles? yes according to decription
+
+will the defender hit after he dies?
+
+can 2 things spawn in the same place?
+
+law fee zombie odamk f adj cell can i go to his cell or invalid?
+
+ana lmma agy a3mel cure by5tar el hero? wlla random? wlla csv tany wa7ed then el b3do
+
+ana babtdy b anhy hero? from csv awel wa7ed?
+
+can i use any charcater f nafs el turn?
+
+when do i envoke end turn?
+
+how many extra zombies are spawned after ending a turn? ans:1
+
+minimap?
+
+checkgameOver method is invoked when 0 heros or checkwin=true?
+
+what is the big square map in the milestone 2 description
+
+what happens if i have less than 5 heros and i've already used all vaccines
+
+what is the purpose of isSafe?
+
+ezbot move in point(int y, in x) not (x,y)
+
+square 
+
+[14-y][x] for the map 3shan el array btbtdy mn fo2
+
+can we heal from anywhere/ healer has to be adjacent? yes we can heal from anywhere
+
+howa el defend automatic l kol attack action envoked?
+
+envoke every turn the checkgameOver and checkwin method
