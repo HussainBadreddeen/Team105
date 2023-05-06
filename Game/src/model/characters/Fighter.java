@@ -12,37 +12,57 @@ public class Fighter extends Hero{
 	}
 	
 	
-	/*public void attack() throws NotEnoughActionsException {
+	public void attack() throws NotEnoughActionsException, InvalidTargetException {
+		if (this.getActionsAvailable() <= 0)
+			throw new NotEnoughActionsException();
 		
-		try {
-			super.attack();
-			if (this.isSpecialAction())
-				this.setActionsAvailable(this.getActionsAvailable() + 1);
-			}
-		catch(GameActionException e) {
-				
-			}
+		else if (this.getTarget() instanceof Hero || this.getTarget() == null)
+			throw new InvalidTargetException();
 		
-		}*/
+		else if (!this.isAdjacent(this.getTarget())) {
+			throw new InvalidTargetException();
+		}
+		
+		else {
+			if (!this.isSpecialAction())
+				this.setActionsAvailable(getActionsAvailable() - 1);
+			this.getTarget().setCurrentHp(this.getTarget().getCurrentHp() - this.getAttackDmg());
+			this.getTarget().defend(this);
+		
+			if (this.getTarget().getCurrentHp() <= 0) 
+				this.getTarget().onCharacterDeath();
+			
+		
+		}
+			
+			
+		
+		
+		
+			
+		
+					
+			
+		
+		
 	
-	public void attack() throws NotEnoughActionsException { //for future use if necessary
-		if (this.isSpecialAction()) {
+	/*public void attack() throws NotEnoughActionsException {             //for future use if necessary
+		if (this.isSpecialAction()) 
 			if (this.getActionsAvailable() == 0) {
 				throw new NotEnoughActionsException();
-			}
+			
 			
 			else {
 				try {
-				super.attack();
-				}
+				super.attack();}
 				catch(GameActionException e) {
 					
 				}
 			}
 		}
 		
-	}
+	}*/
 	
 	
 	
-}
+	}}

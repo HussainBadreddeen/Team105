@@ -3,10 +3,12 @@ package model.characters;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
+
 import engine.Game;
 import exceptions.*;
 import model.collectibles.*;
 import model.world.*;
+import model.characters.*;
 
 
 abstract public class Hero extends Character{
@@ -69,29 +71,28 @@ abstract public class Hero extends Character{
 		this.supplyInventory.remove(0);//check this which to remove
 	}
 	
-	public void attack() throws NotEnoughActionsException{
-		if (this.actionsAvailable == 0) {
+	public void attack() throws NotEnoughActionsException, InvalidTargetException{
+		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException();}
-
+		
 		
 		else if (this.getTarget() instanceof Hero) {
-			//throw new InvalidTargetException();
+			throw new InvalidTargetException();
 		}
 		
 		
 		else if(!this.isAdjacent(this.getTarget())) {
-			//throw new InvalidTargetException();
+			throw new InvalidTargetException();
 		}
 		
-		else {
-			try {
-			super.attack();
-			this.actionsAvailable -=1;}
-			catch(GameActionException e) {
-				
-			}
+		super.attack();
+		this.actionsAvailable -=1;
+		}
+		
+	
 			
-		}}
+			
+		
 	
 	public void cure() throws Exception{ 
         if ((this.getTarget() instanceof Zombie)){
@@ -100,21 +101,42 @@ abstract public class Hero extends Character{
                 if(!(this.getVaccineInventory().isEmpty())) {
                     Point x = this.getTarget().getLocation();
                     this.removeVaccine();
-                    //if(!Game.availableHeroes.isEmpty()) { remove
+                    Zombie.setZombiesCount();//decreases zombie count by 1
+                    Zombie q = (Zombie) this.getTarget();//trying to solve my question law la2 change back to index 0
+                    Game.zombies.remove(q);//removes 1 zombie from zombies Arraylist. //question which zombie?bec. they have names
+                    //if(!Game.availableHeroes.isEmpty()) { // remove hgame haye5lass msh m7tag a3mlha hena
                     int randnum = new Random().nextInt(Game.availableHeroes.size());
                     Hero h = Game.availableHeroes.get(randnum);
                     Game.heroes.add(h);
-                    h.setLocation(x);
+                    h.setLocation(x);//we put created hero in cured zombie's location
                     Game.availableHeroes.remove(h);
-                    this.setActionsAvailable(getActionsAvailable()-1);
+                 //   this.setTarget(null); // You should remove the hero's target from the Zombies array in Game expected:<0> but was:<1>
+                    this.setActionsAvailable(this.getActionsAvailable()-1);
                 }
+                else{//no vaccines
+                throw new NoAvailableResourcesException();
                 }
              }
+             else{//no actions
+            	  throw new NotEnoughActionsException();
+             }
+             
+             }
+            else {//not adj
+            	   throw new InvalidTargetException();
             }
+            }
+        else {//not zombie
+        	 throw new InvalidTargetException();
+        }
+     
         }
 		
-	public void useSpecial() throws Exception{ 
-        if (this.getSupplyInventory() == null) {
+	public void useSpecial() throws Exception{ //changed from NoAvailableResourcesException to Exception
+	 //   if(this.getTarget() instanceof Zombie) { //brings 4 errors
+	 //  	throw new InvalidTargetException();
+	//}
+	/*else*/if (this.getSupplyInventory().isEmpty()) {//was == null changed to .isEmpty()
             throw new NoAvailableResourcesException();
     }
         else {
@@ -127,6 +149,7 @@ abstract public class Hero extends Character{
 	
 	
 	public void move(Direction d) throws Exception {
+		if(this.getActionsAvailable()>0) {
 		int moveNum = 0;
 		boolean moveYAxis = false;
 		if (d == Direction.LEFT) {
@@ -153,10 +176,11 @@ abstract public class Hero extends Character{
 		int x = (int)this.getLocation().getY();
 		int y = (int)this.getLocation().getX();
 		
-		if (moveYAxis)
+		if (moveYAxis) 
 			y += moveNum;
-		else
+		else 
 			x += moveNum;
+		
 		
 		Point newLocation = new Point(y, x);
 		
@@ -172,8 +196,9 @@ abstract public class Hero extends Character{
 		else if ((Game.map[y][x] instanceof CollectibleCell)) {
 			((CollectibleCell)Game.map[y][x]).getCollectible().pickUp(this);
 			this.setActionsAvailable(this.getActionsAvailable() - 1);
-			Game.map[y][x] = new CharacterCell(this);
-			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
+			Game.map[y][x] = new CharacterCell(this, true);
+			this.getLocation().move(y, x);
+			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()]).setCharacter(null);//kont 3amel .getY() in both index
 			this.getLocation().move(y, x);
 			this.makeAdjacentVisible();
 			
@@ -184,10 +209,9 @@ abstract public class Hero extends Character{
 			
 			this.setCurrentHp(this.getCurrentHp() - dmg);
 			this.setActionsAvailable(this.getActionsAvailable() - 1);
-			
-			Game.map[y][x] = new CharacterCell(this);
-			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
-			this.getLocation().move(y, x);
+			Game.map[y][x] = new CharacterCell(this, true);// should be this but failure says empty
+			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()]).setCharacter(null);//kont 3amel .getY() in both index
+			this.getLocation().move(y, x);//above .setCharachter(this) and not null?
 			this.makeAdjacentVisible();
 			
 		}
@@ -197,28 +221,44 @@ abstract public class Hero extends Character{
 		}
 
 		
-		else {
-			this.setActionsAvailable(this.getActionsAvailable() - 1);
-			((CharacterCell)Game.map[y][x]).setCharacter(this);
-			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
-			this.getLocation().move(y, x);
-			this.makeAdjacentVisible();
+		else {//not trap or collectible not out of map. should move
+			if(this.getActionsAvailable()>0) {
+				this.setActionsAvailable(this.getActionsAvailable() - 1);
+				((CharacterCell)Game.map[y][x]).setCharacter(this);
+				//((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
+				Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()] = new CharacterCell(null);//kont 3amel .getY() in both index
+				this.getLocation().move(y, x);
+				this.makeAdjacentVisible();
+			}
+			else {
+				throw new NotEnoughActionsException();
+			}
 		}
 		
 		
 		
 	}
+		else {//mafeesh actions kfaya yt7rk
+			throw new NotEnoughActionsException();
+		}
+	}
 	
 	public void makeAdjacentVisible() {
-		Cell[] adj = this.giveAdjacentCells();
-		int x = (int)this.getLocation().getY();
-		int y = (int)this.getLocation().getX();
-		Game.map[y][x].setVisible(true);
-		for (int i = 0; i < adj.length;i++) {
-			if (adj[i] != null) {
-				adj[i].setVisible(true);
+		if(this.getCurrentHp()<=0) {
+			//law hero dead yb2a msh hyshoof haga
+		}
+		else {
+			Cell[] adj = this.giveAdjacentCells();
+			int x = (int)this.getLocation().getY();
+			int y = (int)this.getLocation().getX();
+			Game.map[y][x].setVisible(true);
+			for (int i = 0; i < adj.length;i++) {
+				if (adj[i] != null) {
+					adj[i].setVisible(true);
+				}
 			}
 		}
+		
 		
 	}
 	

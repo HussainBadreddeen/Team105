@@ -5,6 +5,7 @@ import engine.Game;
 import exceptions.*;
 import model.world.*;
 
+
 abstract public class Character { //convention public abstract not abstract public
 	private String name;
 	private Point location;
@@ -65,56 +66,61 @@ abstract public class Character { //convention public abstract not abstract publ
 		this.target = target;
 	}
 	
-	public void attack() throws GameActionException{
-		//include invalid target exception
+	public void attack() throws NotEnoughActionsException, InvalidTargetException{ // when changed to
 		if (this.target != null) {
 			this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 			this.target.defend(this);
 		
-			if (this.target.currentHp <= 0) {
-			this.target.onCharacterDeath();
+			if (this.target.currentHp <= 0) 
+				this.target.onCharacterDeath();
 			}
-	}
-		else {//target = null
-			//throw new InvalidTargetException();//btgeeb error (& / or) failure for now 3shan tests bayza
+		else {
+			throw new InvalidTargetException();//both have common invtrgtException but NotEnoughActionsException is specifc to hero so implemted in hero
 		}
+	
+		
 		//Include exceptions somehow for all attack methods
 		}
 		
 	
-	public void defend(Character c) {
-		this.target = c;
-		this.target.setCurrentHp(this.target.getCurrentHp() - (this.attackDmg/2));
+	public void defend(Character c) { //this is zombie c is attacker
+		this.setTarget(c); 
+		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));
+		if (this.currentHp <= 0) 
+			this.onCharacterDeath();
 	}
 	
 	public void onCharacterDeath() {
+		
 		if (this instanceof Hero) {
-			Game.heroes.remove(this);}
-		if (this instanceof Zombie) {
-			Game.zombies.remove(this);}
+			Game.heroes.remove(this);
+			}
 		
 		Point l = this.getLocation();
-		int x = (int)(l.getX());
-		int y = (int)(l.getY());
-		Game.map[y][x] = null;
+		int x = (int)(l.getY());
+		int y = (int)(l.getX());
+		Game.map[y][x] = new CharacterCell(null, true);
 			
+		
+		if (this instanceof Zombie) {
+			Game.zombies.remove(this);
 			boolean flag = true;
 			do {
-				x = Game.randomPosition();//for zombie
-				y = Game.randomPosition();//for zombie
+				x = Game.randomPosition();
+				y = Game.randomPosition();
 				if (Game.map[y][x] instanceof CharacterCell) {
 					if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
 						flag = false;
-					
-				}}
+				}	
+			}
 			while (flag);
 			
 			Zombie z = new Zombie();
 			z.setLocation(new Point(y, x));
 			Game.zombies.add(z);
 			Game.map[y][x] = new CharacterCell(z);
-			
-			}
+		}
+	}	
 		
 	
 	

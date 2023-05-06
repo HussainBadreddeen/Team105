@@ -9,6 +9,7 @@ import java.util.Random;
 
 import model.characters.*; //we can use this instead of importing each indvidually
 import model.characters.Character;//for some reason we need this bec. the one above isnt working 
+import model.characters.Hero;
 import model.collectibles.*;
 import model.world.*;
 import exceptions.*;
@@ -20,7 +21,7 @@ public class Game {
 	public static ArrayList<Hero> availableHeroes =  new ArrayList<Hero>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-	public static Cell[][] map;//MAP BAYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	public static Cell[][] map;//No longer bayza i think
 
 		
 	//Arrays.fill(new CharacterCell(null));
@@ -70,6 +71,8 @@ public class Game {
 			Point l =new Point(0, 0);
 			h.setLocation(l);
 			map[0][0] = new CharacterCell(h);
+			//h.makeAdjacentVisible(); // did this after intializing everything f a5eir startgame and it works
+			
 
 			for (int i = 0; i < 5; i++) {//5 vaccines rnd locations
 				int x;
@@ -125,38 +128,43 @@ public class Game {
 					}
 			}
 			
-			
+			h.makeAdjacentVisible();//hero should see adjacent cells after everything is initialized 	
 		} 
 		
 		public static boolean checkWin() {
-			return (Vaccine.getUseCount() == 5) && (heroes.size() >= 5);
-			
+			return (Vaccine.getUseCount() == 5) && (heroes.size() >= 5);// && () ;//The player only wins if he has successfully collected and used all vaccines 
+			//and has 5 or more heroes alive
 		}
 		
 		public static boolean checkGameOver() {
-			return (checkWin() || (heroes.size()==0));
+			return (checkWin() || (heroes.size()==0) || availableHeroes.isEmpty());// added || availableHeroes.isEmpty()
 			
 		}
+		public static void setAllCellVisbility(boolean isVisible) {
+            for (int i = 0; i< 15; i++) {
+                for (int j = 0; j< 15; j++) {
+                    map[i][j].setVisible(isVisible);
+                }
+            }
+        }
+		
 		public static void endTurn() {
             for (int i = 0; i < zombies.size();i++) {
                 Zombie z = zombies.get(i);
-                Cell[] adj = z.giveAdjacentCells();
-                for (int j = 0; j < adj.length; j++ ) {
-                    if (adj[j] instanceof CharacterCell) {
-	                	if ((adj[j] != null) & ((CharacterCell)adj[j]).getCharacter() instanceof Hero) {
-	                        z.setTarget(((CharacterCell)adj[i]).getCharacter());
-	                        try {
-	                            z.attack();}
-	                        catch(GameActionException e){
-	                        }
-	                    }}
-                }
+                
+                try {
+					z.attack();
+				} catch (InvalidTargetException e) {
+					
+				} catch (NotEnoughActionsException e) {
+					
+				}
                 z.setTarget(null);
                 
 
             }
-
-            if (zombies.size() < 10) {
+//we only spawn new zombie in 2 cases: if a zombie is dead or when a turn ends
+            if (zombies.size() < 10) {//tab ma momken el hero my3mlsh cure bsor3a enough so zombies ykoon >10. s3tha msh hy spawn more zombies
                 int x;
                 int y;
                 boolean flag = true;
@@ -171,10 +179,9 @@ public class Game {
                 while (flag);
 
                 Zombie z = new Zombie();
-                Game.map[y][x] = new CharacterCell(z);
                 z.setLocation(new Point(y, x));
                 Game.zombies.add(z);
-              
+                Game.map[y][x] = new CharacterCell(z);
             }
 
             setAllCellVisbility(false);
@@ -184,20 +191,19 @@ public class Game {
                 h.setSpecialAction(false);
                 h.setActionsAvailable(h.getMaxActions());
                 h.setTarget(null);
-                h.makeAdjacentVisible();
+                h.makeAdjacentVisible();//kda adj to hero vis
+                //int x =  (int)h.getLocation().getX();
+                //int y =  (int)h.getLocation().getY();
+                //map[y][x].setVisible(true);  //hero cells nafsha visble? this doesnt change anyth for testing
             }
+ 
+               
 
 
 
         }
 		
-		public static void setAllCellVisbility(boolean isVisible) {
-            for (int i = 0; i< 15; i++) {
-                for (int j = 0; j< 15; j++) {
-                    map[i][j].setVisible(isVisible);
-                }
-            }
-        }
+	
 		  
 			 
 			public static void main(String args[]) {
@@ -207,9 +213,9 @@ public class Game {
 				Character z =  new Zombie();
 				startGame(new Fighter("n", 200, 10, 5));
 				
-				Point l = new Point(0, 0);
+				Point l = new Point(0, 0);//
 				c.isCharacterAtLocation(l);
-				Point l2 = new Point(13, 0);
+				Point l2 = new Point(0, 2);
 				c.setLocation(l);
 				z.setLocation(l2);
 				//map[03][0] = new CharacterCell(z);
@@ -222,6 +228,17 @@ public class Game {
 				}
 					
 				System.out.println(c.isCharacterAtLocation(l));//true y3ny f el makan el sa7 ehhhh b2aaaa
+				System.out.println(c.isAdjacent(z));//adjacernt works?yes fee eh b2a
+			Cell[] x =(c.giveAdjacentCells());//
+			for(int i =0; i< x.length;i++) {
+				if(x[i]==null) {
+					System.out.println("balabeezo");
+				}
+				else {
+					System.out.println("works");
+				}
+			}
+		
 				
 				//((Hero)c).move(Direction.DOWN);
 				//System.out.println(c.getLocation().getX() + " " + c.getLocation().getY());

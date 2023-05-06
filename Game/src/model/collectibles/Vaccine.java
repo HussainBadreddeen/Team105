@@ -1,6 +1,6 @@
 package model.collectibles;
 
-import java.awt.Point;//we may want to use this to implement location of the collectible to compare with hero loc to pickup
+import java.awt.Point;
 
 import exceptions.NoAvailableResourcesException;
 import model.characters.*; // to use for hero 
@@ -34,10 +34,10 @@ public class Vaccine implements Collectible{
 		}*/
 		
 	public void pickUp(Hero h) { //new pickUp Method
-		//if(h.getLocation() instanceof CollectibleCell.get) //basically hero inside collectible cell then he can pick it up we need to implement this
-		h.addVaccine(this);//above comment handled in move method
+		h.addVaccine(this);
+		
+		
 	}
-	
 		
 
 	@Override

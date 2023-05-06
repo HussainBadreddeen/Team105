@@ -1,7 +1,8 @@
 package model.collectibles;
 
-import java.awt.Point;//we may want to use this to implement location of the collectible to compare with hero loc to pickup
-import exceptions.*;
+import java.awt.Point;
+
+import exceptions.NoAvailableResourcesException;
 import model.characters.*; // to use for hero
 import model.world.*;// to use for collectiblecell
 
@@ -15,13 +16,11 @@ public class Supply implements Collectible {
 	
 	@Override
 	public void pickUp(Hero h) {//implement location of collectible here?
-		//if(h.getLocation() instanceof CollectibleCell.get) //basically hero inside collectible cell then he can pick it up we need to implement this
-		h.addSupply(this);//above comment handled in move method
-		
+		h.addSupply(this);
 		//made a method in hero class and used it here. auto pickup?
 		//logic implemented here not hero class
+		
 	}
-	
 	
 	@Override
 	public void use(Hero h) throws NoAvailableResourcesException {
