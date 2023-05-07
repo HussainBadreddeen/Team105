@@ -140,7 +140,7 @@ abstract public class Hero extends Character{
 		
 	
 	
-	public void move(Direction d) throws Exception {
+	public void move(Direction d) throws MovementException, NotEnoughActionsException {
 		if(this.getActionsAvailable()>0) {
 		int moveNum = 0;
 		boolean moveYAxis = false;
@@ -155,12 +155,12 @@ abstract public class Hero extends Character{
 		}
 		
 		else if (d == Direction.UP) {
-			moveNum = 1;
+			moveNum = 1;   
 			moveYAxis = true;
 		}
 		
 		else if (d == Direction.DOWN) {
-			moveNum = -1;
+			moveNum = -1; 
 			moveYAxis = true;
 		}
 		
@@ -240,7 +240,7 @@ abstract public class Hero extends Character{
 		Cell[] adj = this.giveAdjacentCells();
 		int x = (int)this.getLocation().getY();
 		int y = (int)this.getLocation().getX();
-		Game.map[y][x].setVisible(true);
+		Game.map[x][y].setVisible(true);
 		for (int i = 0; i < adj.length;i++) {
 			if (adj[i] != null) {
 				adj[i].setVisible(true);

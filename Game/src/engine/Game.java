@@ -257,6 +257,18 @@ public class Game {
 
         }
 		
+		public static void printMap() {
+			String vis = "NV";
+			for (int i = 14; i >= 0; i--) {
+                for (int j = 0; j < 15 ; j++) {
+                	if (map[j][i].isVisible())
+                		vis = "V";
+                	else
+                		vis = "I";
+                	System.out.print(" [" + vis + "] ");
+                } System.out.println();
+            }
+		}
 	
 		  
 			 
@@ -265,8 +277,19 @@ public class Game {
 				Character c =  new Fighter("n", 200, 10, 5);
 				startGame(new Fighter("n", 200, 10, 5));
 				c.setLocation(new Point(13, 1));
-				
+				heroes.add((Hero)c);
 				((Hero)c).makeAdjacentVisible();
+				
+				endTurn();
+				try {
+					//((Hero)c).move(Direction.RIGHT);
+					//((Hero)c).move(Direction.RIGHT);
+					((Hero)c).move(Direction.DOWN);
+					//((Hero)c).move(Direction.LEFT);
+				} catch (MovementException | NotEnoughActionsException e) {}
+				
+				endTurn();
+				
 				
 				Cell[] adj = c.giveAdjacentCells();
 				
@@ -283,7 +306,8 @@ public class Game {
 		                    }
 		                }
 		            }
-				  System.out.println(count);
+				  //System.out.println(count);
+				  printMap();
 				
 				
 				//System.out.println(map[(int)c.getLocation().getX()][(int)c.getLocation().getY()].isVisible());

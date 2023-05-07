@@ -103,8 +103,7 @@ abstract public class Character { //convention public abstract not abstract publ
 		Point l = this.getLocation();
 		int x = (int)(l.getY());
 		int y = (int)(l.getX());
-		Game.map[y][x] = new CharacterCell(null, true);
-		
+		((CharacterCell)Game.map[y][x]).setCharacter(null);
 		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
