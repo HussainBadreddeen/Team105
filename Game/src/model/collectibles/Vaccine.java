@@ -1,9 +1,14 @@
 package model.collectibles;
 
 import java.awt.Point;
+import java.util.Random;
 
+import engine.Game;
+import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
+import exceptions.NotEnoughActionsException;
 import model.characters.*; // to use for hero 
+import model.world.CharacterCell;
 
 public class Vaccine implements Collectible{
 	//removed the point variable, methods, constructor
@@ -41,24 +46,36 @@ public class Vaccine implements Collectible{
 		
 
 	@Override
-	public void use(Hero h) throws NoAvailableResourcesException {//player can only win the game once all vaccines have been collected and used
-		h.removeVaccine();// cure zombies and recruit new heroes here?
-		this.useCount += 1;
-		//System.out.println("choose: FIGH,MED,EXP");//player by choose akeed sah? N:takes from availableHeroes probably
-		//create enum w y choose meno?
-		//Zombie.setZombiesCount();//this dec by 1 or change count public 
-//Zombie.ZOMBIES_COUNT--;//mynf3sh 3shan zombies_count private y2ma ne3mllo public hmm?
-		//
-		//a hero of chosen type added here
-		//code for instantiating desired hero
-	
-		//logic implemented here not hero class
+	public void use(Hero h) throws NoAvailableResourcesException{//player can only win the game once all vaccines have been collected and used
+		//h.removeVaccine();// cure zombies and recruit new heroes here?
+		if (h.getVaccineInventory().size() > 0) {
+			h.removeVaccine();
+			Vaccine.useCount += 1;
+			Game.zombies.remove(h.getTarget());
+			Point p = h.getTarget().getLocation();
+	        
+	        Zombie.setZombiesCount();
+	 
+	        int randnum = new Random().nextInt(Game.availableHeroes.size());
+	        Hero hero = Game.availableHeroes.get(randnum);
+	        Game.heroes.add(hero);
+	        hero.setLocation(p);
+	        ((CharacterCell)Game.map[(int)p.getX()][(int)p.getY()]).setCharacter(hero);  //we put created hero in cured zombie's location
+	        Game.availableHeroes.remove(hero);
+	     //   this.setTarget(null); // You should remove the hero's target from the Zombies array in Game expected:<0> but was:<1>
+	        h.setActionsAvailable(h.getActionsAvailable()-1);
+			}
+		
+		else
+			throw new NoAvailableResourcesException();
 		
 	}
 
 	public static int getUseCount() {
 		return useCount;
 	}
+
+	
 
 	
 

@@ -46,8 +46,10 @@ abstract public class Character { //convention public abstract not abstract publ
 	}
 	
 	public void setCurrentHp(int currentHp) {
-		if(currentHp < 0) 
+		if(currentHp <= 0) {
 			this.currentHp = 0;
+			this.onCharacterDeath(); 
+			}
 		else if(currentHp > maxHp) 
 			this.currentHp = maxHp;
 		else 
@@ -70,10 +72,12 @@ abstract public class Character { //convention public abstract not abstract publ
 		if (this.target != null) {
 			this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 			this.target.defend(this);
-		
-			if (this.target.currentHp <= 0) 
-				this.target.onCharacterDeath();
+			if (this.target.getCurrentHp() == 0) {
+				//this.target.onCharacterDeath();
+				this.target = null;
 			}
+		}
+		
 		else {
 			throw new InvalidTargetException();//both have common invtrgtException but NotEnoughActionsException is specifc to hero so implemted in hero
 		}
@@ -86,8 +90,8 @@ abstract public class Character { //convention public abstract not abstract publ
 	public void defend(Character c) { //this is zombie c is attacker
 		this.setTarget(c); 
 		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));
-		if (this.currentHp <= 0) 
-			this.onCharacterDeath();
+		/*if (this.currentHp == 0)   //logic out of the window
+			c.target = null;*/
 	}
 	
 	public void onCharacterDeath() {
@@ -100,7 +104,7 @@ abstract public class Character { //convention public abstract not abstract publ
 		int x = (int)(l.getY());
 		int y = (int)(l.getX());
 		Game.map[y][x] = new CharacterCell(null, true);
-			
+		
 		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);

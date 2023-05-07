@@ -13,27 +13,31 @@ public class Fighter extends Hero{
 	
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException {
+		if (this.getTarget() instanceof Hero || this.getTarget() == null)
+			throw new InvalidTargetException();
+		
+		
+		if (!this.isAdjacent(this.getTarget())) {
+			throw new InvalidTargetException();
+		}
+		
+		
 		if (this.getActionsAvailable() <= 0)
 			throw new NotEnoughActionsException();
 		
-		else if (this.getTarget() instanceof Hero || this.getTarget() == null)
-			throw new InvalidTargetException();
-		
-		else if (!this.isAdjacent(this.getTarget())) {
-			throw new InvalidTargetException();
+	
+		if (!this.isSpecialAction())
+			this.setActionsAvailable(getActionsAvailable() - 1);
+		this.getTarget().setCurrentHp(this.getTarget().getCurrentHp() - this.getAttackDmg());
+		this.getTarget().defend(this);
+	
+		if (this.getTarget().getCurrentHp() == 0) {
+			//this.getTarget().onCharacterDeath();
+			//this.setTarget(null); //logic out of the window
 		}
-		
-		else {
-			if (!this.isSpecialAction())
-				this.setActionsAvailable(getActionsAvailable() - 1);
-			this.getTarget().setCurrentHp(this.getTarget().getCurrentHp() - this.getAttackDmg());
-			this.getTarget().defend(this);
-		
-			if (this.getTarget().getCurrentHp() <= 0) 
-				this.getTarget().onCharacterDeath();
 			
 		
-		}
+		
 			
 			
 		

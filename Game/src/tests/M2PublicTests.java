@@ -1136,7 +1136,7 @@ public class M2PublicTests {
 			boolean visible = (boolean) isVisible.invoke(cell);
 
 			assertTrue("The visibility of cells should not be updated as the hero is dead. Expected visibility = true"
-					+ " but was false ", false == visible);
+					+ " but was false " + " " + visible, false == visible);
 
 		} catch (NoSuchMethodException e) {
 			fail("Hero class should have isVisible method");
@@ -1890,7 +1890,7 @@ public class M2PublicTests {
 
 		boolean isAllDead = heroList.size() <= 1;
 
-		assertEquals("All 8 heros around Zombie should be dead after attacking all of them", isAllDead, true);
+		assertEquals("All 8 heros around Zombie should be dead after attacking all of them" + " " + zombieList.get(8).getName(), true ,isAllDead);
 	}
 
 	@Test(timeout = 5000)
@@ -2247,9 +2247,9 @@ public class M2PublicTests {
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
-		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
-		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
-		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
+		boolean isD = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
+		boolean isDead = isD && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
+		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array " + " " + isD + " ", isDead,
 				true);
 	}
 

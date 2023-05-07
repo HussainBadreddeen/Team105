@@ -65,79 +65,120 @@ public class Game {
 		
 		
 		public static void startGame(Hero h) {
-			map = new Cell[15][15]; //MAP BAYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAA IF I REMOVE THIS IT STILL PRODUCES THE SAME ERRORS AND FAILURES
-			heroes.add(h);
-			availableHeroes.remove(h);
-			Point l =new Point(0, 0);
-			h.setLocation(l);
-			map[0][0] = new CharacterCell(h);
-			//h.makeAdjacentVisible(); // did this after intializing everything f a5eir startgame and it works
+			map = new Cell[15][15];
 			
-
-			for (int i = 0; i < 5; i++) {//5 vaccines rnd locations
-				int x;
-				int y;
-					x = randomPosition();
-					y = randomPosition();
-				
-					if(map[y][x]==null) {// if cell is null then mfeehash haga
-						map[y][x] = new CollectibleCell(new Vaccine());
-					}
-		}
 			
-			for (int i = 0; i < 5; i++) {//5 supplies rnd locations
-				int x;
-				int y;
-					x = randomPosition();
-					y = randomPosition();
-		
-				if(map[y][x]==null) {// if cell is null then mfeehash haga
-					map[y][x] = new CollectibleCell(new Supply());
-				}
-			}
-			
-			for (int i = 0; i < 5; i++) { //5 traps rnd locations
-				int x;
-				int y;
-					x = randomPosition();
-					y = randomPosition();
-		
-				if(map[y][x]==null) {// if cell is null then mfeehash haga
-					map[y][x] = new TrapCell();
-				}
-			}
-			
-			for (int i = 0; i < 10; i++) {//5 Zombies rnd locations
-				int x;
-				int y;
-				x = randomPosition();
-				y = randomPosition();
-				if(map[y][x]==null) {// if cell is null then mfeehash haga
-					Zombie z = new Zombie();
-					map[y][x] = new CharacterCell(z);
-					z.setLocation(new Point(y, x));
-					zombies.add(z);
-				}
-			}
-			
-			for (int i = 0; i < 15; i++) {// anything else intialize charachter cell
+			for (int i = 0; i < 15; i++) {
 				for (int j = 0; j < 15; j++) {
-					if(map[i][j]==null) {
 					map[i][j] = new CharacterCell(null);
 				}
-					}
 			}
 			
-			h.makeAdjacentVisible();//hero should see adjacent cells after everything is initialized 	
+			heroes.add(h);
+			availableHeroes.remove(h);
+			h.setLocation(new Point(0, 0));
+			map[0][0] = new CharacterCell(h);
+			
+			for (int i = 0; i < 5; i++) {
+				int x;
+				int y;
+				boolean flag = true;
+				do {
+					x =  randomPosition();
+					y = randomPosition();
+					if (map[y][x] instanceof CharacterCell) {
+						if (((CharacterCell)(map[y][x])).getCharacter() == null)
+							flag = false;
+						
+					}}
+				while (flag);/*|| (y == 0 && x == 0)*/ //hero pos can be place in while condition
+				map[y][x] = new CollectibleCell(new Vaccine());
+				
+			}
+			
+			for (int i = 0; i < 5; i++) {
+				int x;
+				int y;
+				boolean flag = true;
+				do {
+					x =  randomPosition();
+					y = randomPosition();
+					if (map[y][x] instanceof CharacterCell) {
+						if (((CharacterCell)(map[y][x])).getCharacter() == null)
+							flag = false;
+						
+					}}
+				while (flag);
+				map[y][x] = new CollectibleCell(new Supply());
+				
+			}
+			
+			for (int i = 0; i < 5; i++) {
+				int x;
+				int y;
+				boolean flag = true;
+				do {
+					x =  randomPosition();
+					y = randomPosition();
+					if (map[y][x] instanceof CharacterCell) {
+						if (((CharacterCell)(map[y][x])).getCharacter() == null)
+							flag = false;
+					}	
+				}
+				while (flag);
+				
+				map[y][x] = new TrapCell();
+				
+			}
+			
+			for (int i = 0; i < 10; i++) {
+				int x;
+				int y;
+				boolean flag = true;
+				do {
+					x =  randomPosition();
+					y = randomPosition();
+					if (map[y][x] instanceof CharacterCell) {
+						if (((CharacterCell)(map[y][x])).getCharacter() == null)
+							flag = false;
+						
+					}}
+				while (flag);
+				
+				Zombie z = new Zombie();
+				z.setLocation(new Point(y, x));
+				zombies.add(z);
+				map[y][x] = new CharacterCell(z);
+				
+				}
+			
+			h.makeAdjacentVisible();
 		} 
 		
 		public static boolean checkWin() {
-			return (Vaccine.getUseCount() == 5) && (heroes.size() >= 5);// && () ;//The player only wins if he has successfully collected and used all vaccines 
+			int count = 0;
+			for (int i = 0; i < heroes.size(); i++) {
+				count += heroes.get(i).getVaccineInventory().size();
+			}
+			return getRemainingVaccines() == 0 && (count == 0) && (heroes.size() >= 5);// && () ;//The player only wins if he has successfully collected and used all vaccines 
 			//and has 5 or more heroes alive
 		}
 		
 		public static boolean checkGameOver() {
-			return (checkWin() || (heroes.size()==0) || availableHeroes.isEmpty());// added || availableHeroes.isEmpty()
+			if (getRemainingVaccines() != 0)
+				return false;
+			
+			int count = 0;
+			for (int i = 0; i < heroes.size(); i++) {
+				count += heroes.get(i).getVaccineInventory().size();
+			}
+			
+			 
+		
+			
+			
+			
+			return (count == 0 || checkWin() || (heroes.size()==0) || availableHeroes.isEmpty());// added || availableHeroes.isEmpty()
 			
 		}
 		public static void setAllCellVisbility(boolean isVisible) {
@@ -146,6 +187,19 @@ public class Game {
                     map[i][j].setVisible(isVisible);
                 }
             }
+        }
+		
+		public static int getRemainingVaccines() {
+            int count = 0;
+			for (int i = 0; i< 15; i++) {
+                for (int j = 0; j< 15; j++) {
+                    if (map[i][j] instanceof CollectibleCell) {
+                    	if (((CollectibleCell)map[i][j]).getCollectible() instanceof Vaccine)
+                    		count += 1;
+                    }
+                }
+            }
+			return count;
         }
 		
 		public static void endTurn() {
@@ -164,7 +218,7 @@ public class Game {
 
             }
 //we only spawn new zombie in 2 cases: if a zombie is dead or when a turn ends
-            if (zombies.size() < 10) {//tab ma momken el hero my3mlsh cure bsor3a enough so zombies ykoon >10. s3tha msh hy spawn more zombies
+            //if (zombies.size() < 10) {//tab ma momken el hero my3mlsh cure bsor3a enough so zombies ykoon >10. s3tha msh hy spawn more zombies
                 int x;
                 int y;
                 boolean flag = true;
@@ -182,7 +236,7 @@ public class Game {
                 z.setLocation(new Point(y, x));
                 Game.zombies.add(z);
                 Game.map[y][x] = new CharacterCell(z);
-            }
+            //}
 
             setAllCellVisbility(false);
 
@@ -209,40 +263,30 @@ public class Game {
 			public static void main(String args[]) {
 				
 				Character c =  new Fighter("n", 200, 10, 5);
-				
-				Character z =  new Zombie();
 				startGame(new Fighter("n", 200, 10, 5));
+				c.setLocation(new Point(13, 1));
 				
-				Point l = new Point(0, 0);//
-				c.isCharacterAtLocation(l);
-				Point l2 = new Point(0, 2);
-				c.setLocation(l);
-				z.setLocation(l2);
-				//map[03][0] = new CharacterCell(z);
+				((Hero)c).makeAdjacentVisible();
+				
 				Cell[] adj = c.giveAdjacentCells();
-				int count = 0;
+				
 				for (int i = 0; i < adj.length; i++) {
-					if (adj[i] != null) 
-						count+=1;
-					
+					if (adj[i] != null) {
+						//System.out.println(adj[i].isVisible());
+					}
 				}
-					
-				System.out.println(c.isCharacterAtLocation(l));//true y3ny f el makan el sa7 ehhhh b2aaaa
-				System.out.println(c.isAdjacent(z));//adjacernt works?yes fee eh b2a
-			Cell[] x =(c.giveAdjacentCells());//
-			for(int i =0; i< x.length;i++) {
-				if(x[i]==null) {
-					System.out.println("balabeezo");
-				}
-				else {
-					System.out.println("works");
-				}
-			}
-		
+				int count = 0;
+				  for (int i = 0; i< 15; i++) {
+		                for (int j = 0; j< 15; j++) {
+		                    if (map[i][j].isVisible()) {
+		                    	count +=1;
+		                    }
+		                }
+		            }
+				  System.out.println(count);
 				
-				//((Hero)c).move(Direction.DOWN);
-				//System.out.println(c.getLocation().getX() + " " + c.getLocation().getY());
 				
+				//System.out.println(map[(int)c.getLocation().getX()][(int)c.getLocation().getY()].isVisible());
 				
 			}
 	
