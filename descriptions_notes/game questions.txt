@@ -1,0 +1,22 @@
+when does a turn end ~ finish with all heroes first?
+
+do i have to use all my availableactions?
+
+automatic pickup of collectibles? yes according to decription
+
+ana babtdy b anhy hero? from csv awel wa7ed?
+
+can i use any charcater f nafs el turn? yes
+
+when do i envoke end turn?
+
+what happens if i have less than 5 heros and i've already used all vaccines?
+
+
+QUESTIONS AFTER HAVING 9 FAILS
+
+
+Which hero should zombie attack do i choose from code(M2) or from game(M3)?
+
+
+
