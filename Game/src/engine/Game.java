@@ -258,15 +258,36 @@ public class Game {
         }
 		
 		public static void printMap() {
-			String vis = "NV";
+			String vis = "";
 			for (int i = 14; i >= 0; i--) {
                 for (int j = 0; j < 15 ; j++) {
-                	if (map[j][i].isVisible())
-                		vis = "V";
+                	/*if (map[i][j] instanceof CharacterCell) {
+                		if (((CharacterCell)map[i][j]).getCharacter() instanceof Zombie) {
+                			vis = "Zom";}
+                		else if (((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
+                			vis = "Her";}
+                		
+                		else
+                			vis = "Emp";
+                	}
+                	
+                	else if (map[i][j] instanceof TrapCell) {
+                		vis = "Tra";
+                	}
+                	
+                	else if (map[i][j] instanceof CollectibleCell) {
+                		vis = "Col";
+                	}*/
+                	
+                	if (map[i][j].isVisible())
+                		vis = "1";
                 	else
-                		vis = "I";
+                		vis = "0";
+  
+                		
                 	System.out.print(" [" + vis + "] ");
-                } System.out.println();
+                } 
+                System.out.println();
             }
 		}
 	
@@ -277,18 +298,29 @@ public class Game {
 				Character c =  new Fighter("n", 200, 10, 5);
 				startGame(new Fighter("n", 200, 10, 5));
 				c.setLocation(new Point(13, 1));
-				heroes.add((Hero)c);
-				((Hero)c).makeAdjacentVisible();
 				
-				endTurn();
+				map[13][1] = new CharacterCell(c);
+				heroes.add((Hero)c);
+				
+				Zombie z = new Zombie();
+				z.setCurrentHp(1);
+				zombies.add(z);
+				z.setLocation(new Point(13, 0));
+
+				map[13][0] = new CharacterCell(z);
+				c.setTarget(z);
+				
+				//((Hero)c).makeAdjacentVisible();
+				
+				//endTurn();
 				try {
 					//((Hero)c).move(Direction.RIGHT);
 					//((Hero)c).move(Direction.RIGHT);
 					((Hero)c).move(Direction.DOWN);
 					//((Hero)c).move(Direction.LEFT);
 				} catch (MovementException | NotEnoughActionsException e) {}
-				
-				endTurn();
+			
+				//endTurn();
 				
 				
 				Cell[] adj = c.giveAdjacentCells();
@@ -307,7 +339,17 @@ public class Game {
 		                }
 		            }
 				  //System.out.println(count);
-				  printMap();
+				  //System.out.println(getRemainingVaccines());
+				  try {
+					c.attack();
+				} catch (NotEnoughActionsException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				} catch (InvalidTargetException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+				printMap();
 				
 				
 				//System.out.println(map[(int)c.getLocation().getX()][(int)c.getLocation().getY()].isVisible());

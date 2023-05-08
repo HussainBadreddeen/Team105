@@ -101,27 +101,27 @@ abstract public class Character { //convention public abstract not abstract publ
 			}
 		
 		Point l = this.getLocation();
-		int x = (int)(l.getY());
-		int y = (int)(l.getX());
-		((CharacterCell)Game.map[y][x]).setCharacter(null);
+		int h = (int)(l.getX());
+		int w = (int)(l.getY());
+		((CharacterCell)Game.map[h][w]).setCharacter(null);
 		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
 			boolean flag = true;
 			do {
-				x = Game.randomPosition();
-				y = Game.randomPosition();
-				if (Game.map[y][x] instanceof CharacterCell) {
-					if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
+				h = Game.randomPosition();
+				w = Game.randomPosition();
+				if (Game.map[h][w] instanceof CharacterCell) {
+					if (((CharacterCell)(Game.map[h][w])).getCharacter() == null)
 						flag = false;
 				}	
 			}
 			while (flag);
 			
 			Zombie z = new Zombie();
-			z.setLocation(new Point(y, x));
+			z.setLocation(new Point(h, w));
 			Game.zombies.add(z);
-			Game.map[y][x] = new CharacterCell(z);
+			Game.map[h][w] = new CharacterCell(z);
 		}
 	}	
 		
@@ -131,15 +131,17 @@ abstract public class Character { //convention public abstract not abstract publ
 	public Cell[] giveAdjacentCells() {
 		Cell[] adjCells = new Cell[8];
 		Point l = this.getLocation();
-		int x = (int)l.getX() - 1; //13
-		int y = (int)l.getY() + 1; //1
+		int h = (int)l.getX() + 1; //13
+		int w = (int)l.getY() - 1; //1
 		int count = 0;
 
 		for (int i = 0; i < 3;i++) {
-			if (y - i < 15 && y - i >= 0) {
+			if (h - i < 15 && h - i >= 0) {
 				for (int j = 0; j < 3; j++) {
-					if (x + j < 15 && x + j >= 0) {
-						adjCells[count] = Game.map[y - i][x + j];
+					if (w + j < 15 && w + j >= 0) {
+						adjCells[count] = Game.map[h - i][w + j];
+						int a = h - i;
+						int b = w + j;
 						count++;}
 					if (i == 1)
 						j++;

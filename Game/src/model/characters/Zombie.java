@@ -1,5 +1,6 @@
 package model.characters;
 
+import engine.Game;
 import exceptions.*;
 import model.world.*;
 
@@ -9,6 +10,7 @@ public class Zombie extends Character{
 	
     public Zombie() {
 		super("Zombie " + ZOMBIES_COUNT++, 40, 10);
+		
 		//ZOMBIES_COUNT++; here in sol but our method works the same
 	}
 

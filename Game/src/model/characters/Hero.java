@@ -165,67 +165,61 @@ abstract public class Hero extends Character{
 		}
 		
 		
-		int x = (int)this.getLocation().getY();
-		int y = (int)this.getLocation().getX();
+		int h = (int)this.getLocation().getX();
+		int w = (int)this.getLocation().getY();
 		
 		if (moveYAxis) 
-			y += moveNum;
+			h += moveNum;
 		else 
-			x += moveNum;
+			w += moveNum;
 		
 		
-		Point newLocation = new Point(y, x);
+		//Point newLocation = new Point(y, x);
+		if (this.getActionsAvailable() == 0)
+			throw new NotEnoughActionsException();
 		
-		if (moveYAxis && ((y < 0) || (y >= 15))) {
+		
+		if (moveYAxis && ((h < 0) || (h >= 15))) {
 			throw new MovementException();  
 
 		}
-		else if (!moveYAxis && ((x < 0) || (x >= 15))) {
+		if (!moveYAxis && ((w < 0) || (w >= 15))) {
 			throw new MovementException();  
 			
 		}
 		
-		else if ((Game.map[y][x] instanceof CollectibleCell)) {
-			((CollectibleCell)Game.map[y][x]).getCollectible().pickUp(this);
-			this.setActionsAvailable(this.getActionsAvailable() - 1);
-			Game.map[y][x] = new CharacterCell(this, true);
-			this.getLocation().move(y, x);
-			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()]).setCharacter(null);//kont 3amel .getY() in both index
-			this.getLocation().move(y, x);
-			this.makeAdjacentVisible();
+		
+		
+		if ((Game.map[h][w] instanceof CollectibleCell)) {
+			((CollectibleCell)Game.map[h][w]).getCollectible().pickUp(this);
+			
 			
 		}
 		
-		else if ((Game.map[y][x] instanceof TrapCell)) {
-			int dmg = ((TrapCell)Game.map[y][x]).getTrapDamage();
+		else if ((Game.map[h][w] instanceof TrapCell)) {
+			int dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
 			
-			this.setCurrentHp(this.getCurrentHp() - dmg);
-			this.setActionsAvailable(this.getActionsAvailable() - 1);
-			Game.map[y][x] = new CharacterCell(this, true);// should be this but failure says empty
-			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()]).setCharacter(null);//kont 3amel .getY() in both index
-			this.getLocation().move(y, x);//above .setCharachter(this) and not null?
-			this.makeAdjacentVisible();
-			
+			this.setCurrentHp(this.getCurrentHp() - dmg);	
 		}
-		else if ((Game.map[y][x] instanceof CharacterCell) & (((CharacterCell)Game.map[y][x]).getCharacter() != null)){
-			throw new MovementException();
-				
-		}
+		
+		if ((Game.map[h][w] instanceof CharacterCell))
+			if (((CharacterCell)Game.map[h][w]).getCharacter() != null)
+				throw new MovementException();
 
+		this.setActionsAvailable(this.getActionsAvailable() - 1);
+		Game.map[h][w] = new CharacterCell(null, true);
 		
-		else {//not trap or collectible not out of map. should move
-			if(this.getActionsAvailable()>0) {
-				this.setActionsAvailable(this.getActionsAvailable() - 1);
-				((CharacterCell)Game.map[y][x]).setCharacter(this);
-				//((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
-				Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getX()] = new CharacterCell(null);//kont 3amel .getY() in both index
-				this.getLocation().move(y, x);
-				this.makeAdjacentVisible();
-			}
-			else {
-				throw new NotEnoughActionsException();
-			}
-		}
+		((CharacterCell)Game.map[h][w]).setCharacter(this);
+		Game.map[(int)this.getLocation().getX()][(int)this.getLocation().getY()] = new CharacterCell(null);
+		
+		this.getLocation().move(h, w);
+		if (this.getCurrentHp() == 0)
+			this.onCharacterDeath();
+		else
+			this.makeAdjacentVisible();
+			
+			
+		
 		
 		
 		
@@ -238,9 +232,9 @@ abstract public class Hero extends Character{
 	public void makeAdjacentVisible() {
 
 		Cell[] adj = this.giveAdjacentCells();
-		int x = (int)this.getLocation().getY();
-		int y = (int)this.getLocation().getX();
-		Game.map[x][y].setVisible(true);
+		int w = (int)this.getLocation().getY();
+		int h = (int)this.getLocation().getX();
+		Game.map[h][w].setVisible(true);
 		for (int i = 0; i < adj.length;i++) {
 			if (adj[i] != null) {
 				adj[i].setVisible(true);
