@@ -1,5 +1,7 @@
 package model.characters;
 
+import java.awt.Point;
+
 import engine.Game;
 import exceptions.*;
 import model.world.*;
@@ -23,7 +25,7 @@ public class Zombie extends Character{
 	public static void setZombiesCount() {//should only decrease by 1 //probably not needed
 		ZOMBIES_COUNT --;
 	}
-	
+
 	public void attack() throws InvalidTargetException, NotEnoughActionsException{
 		
         Cell[] adj = this.giveAdjacentCells();
@@ -38,7 +40,11 @@ public class Zombie extends Character{
 	                    break;
                 }
 	            	}
-            	
+            
+      
+
+        	   
+           }
  
 	
 	
@@ -46,4 +52,4 @@ public class Zombie extends Character{
 }
         }
 	}
-	}
+	

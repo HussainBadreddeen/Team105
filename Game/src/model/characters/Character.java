@@ -96,7 +96,8 @@ abstract public class Character { //convention public abstract not abstract publ
 		
 		int h = (int)(l.getX());
 		int w = (int)(l.getY());
-		
+
+		((CharacterCell)Game.map[h][w]).setCharacter(null);
 		
 		if (this instanceof Hero) {
 			Game.heroes.remove(this);
@@ -124,7 +125,6 @@ abstract public class Character { //convention public abstract not abstract publ
 			Game.map[h][w] = new CharacterCell(z);
 		}
 		
-		((CharacterCell)Game.map[h][w]).setCharacter(null);
 	}	
 		
 	
