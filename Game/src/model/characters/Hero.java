@@ -72,21 +72,19 @@ abstract public class Hero extends Character{
 	}
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException{
+		if (this.getTarget() instanceof Hero || this.getTarget() == null)
+			throw new InvalidTargetException();
+		
+		
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException();}
-		
-		
-		if (this.getTarget() instanceof Hero) {
-			throw new InvalidTargetException();
-		}
-		
 		
 		if(!this.isAdjacent(this.getTarget())) {
 			throw new InvalidTargetException();
 		}
 		
 		super.attack();
-		this.actionsAvailable -=1;
+		
 		}
 		
 	
@@ -167,6 +165,7 @@ abstract public class Hero extends Character{
 		
 		int h = (int)this.getLocation().getX();
 		int w = (int)this.getLocation().getY();
+		int dmg = 0;
 		
 		if (moveYAxis) 
 			h += moveNum;
@@ -197,26 +196,31 @@ abstract public class Hero extends Character{
 		}
 		
 		else if ((Game.map[h][w] instanceof TrapCell)) {
-			int dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
+			dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
+			this.setCurrentHp(this.getCurrentHp() - dmg);
 			
-			this.setCurrentHp(this.getCurrentHp() - dmg);	
+			
 		}
 		
 		if ((Game.map[h][w] instanceof CharacterCell))
 			if (((CharacterCell)Game.map[h][w]).getCharacter() != null)
 				throw new MovementException();
 
+		
+			
 		this.setActionsAvailable(this.getActionsAvailable() - 1);
-		Game.map[h][w] = new CharacterCell(null, true);
+		if (this.getCurrentHp() > 0) {
+			Game.map[h][w] = new CharacterCell(this, true);
+			this.makeAdjacentVisible();}
 		
-		((CharacterCell)Game.map[h][w]).setCharacter(this);
-		Game.map[(int)this.getLocation().getX()][(int)this.getLocation().getY()] = new CharacterCell(null);
 		
-		this.getLocation().move(h, w);
-		if (this.getCurrentHp() == 0)
-			this.onCharacterDeath();
-		else
-			this.makeAdjacentVisible();
+		int oldH = (int)this.getLocation().getX();
+		int oldY = (int)this.getLocation().getY();
+		
+		this.setLocation(new Point(h, w));
+		((CharacterCell)Game.map[oldH][oldY]).setCharacter(null);
+		
+		
 			
 			
 		

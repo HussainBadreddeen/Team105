@@ -21,7 +21,8 @@ public class Game {
 	public static ArrayList<Hero> availableHeroes =  new ArrayList<Hero>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-	public static Cell[][] map;//No longer bayza i think
+	public static Cell[][] map = new Cell[15][15];
+	//No longer bayza i think
 
 		
 	//Arrays.fill(new CharacterCell(null));
@@ -65,7 +66,7 @@ public class Game {
 		
 		
 		public static void startGame(Hero h) {
-			map = new Cell[15][15];
+			//map = new Cell[15][15];
 			
 			
 			for (int i = 0; i < 15; i++) {
@@ -202,21 +203,24 @@ public class Game {
 			return count;
         }
 		
-		public static void endTurn() {
+		public static void endTurn() throws InvalidTargetException,NotEnoughActionsException{
             for (int i = 0; i < zombies.size();i++) {
                 Zombie z = zombies.get(i);
-                
-                try {
+				//try {
 					z.attack();
-				} catch (InvalidTargetException e) {
+					z.setTarget(null);
+				//} catch (InvalidTargetException e) {
+					// TODO Auto-generated catch block
 					
-				} catch (NotEnoughActionsException e) {
-					
-				}
-                z.setTarget(null);
-                
-
+				//} catch (NotEnoughActionsException e) {
+					// TODO Auto-generated catch block
+				
+				//}
+				
+               // z.setTarget(null);
             }
+
+            
 //we only spawn new zombie in 2 cases: if a zombie is dead or when a turn ends
             //if (zombies.size() < 10) {//tab ma momken el hero my3mlsh cure bsor3a enough so zombies ykoon >10. s3tha msh hy spawn more zombies
                 int x;
@@ -261,7 +265,7 @@ public class Game {
 			String vis = "";
 			for (int i = 14; i >= 0; i--) {
                 for (int j = 0; j < 15 ; j++) {
-                	/*if (map[i][j] instanceof CharacterCell) {
+                	if (map[i][j] instanceof CharacterCell) {
                 		if (((CharacterCell)map[i][j]).getCharacter() instanceof Zombie) {
                 			vis = "Zom";}
                 		else if (((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
@@ -277,12 +281,12 @@ public class Game {
                 	
                 	else if (map[i][j] instanceof CollectibleCell) {
                 		vis = "Col";
-                	}*/
+                	}
                 	
-                	if (map[i][j].isVisible())
+                	/*if (map[i][j].isVisible())
                 		vis = "1";
                 	else
-                		vis = "0";
+                		vis = "0";*/
   
                 		
                 	System.out.print(" [" + vis + "] ");
@@ -295,67 +299,78 @@ public class Game {
 			 
 			public static void main(String args[]) {
 				
-				Character c =  new Fighter("n", 200, 10, 5);
-				startGame(new Fighter("n", 200, 10, 5));
-				c.setLocation(new Point(13, 1));
 				
-				map[13][1] = new CharacterCell(c);
-				heroes.add((Hero)c);
+				startGame(new Fighter("n", 200, 10, 5));
+				
+				Character c1 =  new Fighter("n", 1, 1, 5);
+				c1.setLocation(new Point(14, 0));
+				map[14][0] = new CharacterCell(c1);
+				heroes.add((Hero)c1);
+				
+				Character c2 =  new Fighter("n", 1, 200, 1);
+				c2.setLocation(new Point(14, 1));
+				map[14][1] = new CharacterCell(c2);
+				heroes.add((Hero)c2);
+				
+				Character c3 =  new Fighter("n", 1, 200, 1);
+				c3.setLocation(new Point(14, 2));
+				map[14][2] = new CharacterCell(c3);
+				heroes.add((Hero)c3);
+				
+				
+				Character c4 =  new Fighter("n", 1, 200, 1);
+				c4.setLocation(new Point(13, 0));
+				map[13][0] = new CharacterCell(c4);
+				heroes.add((Hero)c4);
+				
+				Character c5 =  new Fighter("n", 1, 200, 1);
+				c5.setLocation(new Point(13, 2));
+				map[13][2] = new CharacterCell(c5);
+				heroes.add((Hero)c5);
+				
+				Character c6 =  new Fighter("n", 1, 200, 1);
+				c6.setLocation(new Point(12, 0));
+				map[12][0] = new CharacterCell(c6);
+				heroes.add((Hero)c6);
+				
+				Character c7 =  new Fighter("n", 1, 200, 1);
+				c7.setLocation(new Point(12, 1));
+				map[12][1] = new CharacterCell(c7);
+				heroes.add((Hero)c7);
+				
+				Character c8=  new Fighter("n", 1, 200, 1);
+				c8.setLocation(new Point(12, 2));
+				map[12][2] = new CharacterCell(c8);
+				heroes.add((Hero)c8);
+				
 				
 				Zombie z = new Zombie();
-				z.setCurrentHp(1);
+				//z.setCurrentHp(1);
 				zombies.add(z);
-				z.setLocation(new Point(13, 0));
-
-				map[13][0] = new CharacterCell(z);
-				c.setTarget(z);
-				
-				//((Hero)c).makeAdjacentVisible();
-				
-				//endTurn();
-				try {
-					//((Hero)c).move(Direction.RIGHT);
-					//((Hero)c).move(Direction.RIGHT);
-					((Hero)c).move(Direction.DOWN);
-					//((Hero)c).move(Direction.LEFT);
-				} catch (MovementException | NotEnoughActionsException e) {}
-			
-				//endTurn();
+				z.setLocation(new Point(13, 1));
+				map[13][1] = new CharacterCell(z);
+				z.giveAdjacentCells();
+//				endTurn(); //1
+//				endTurn(); //2
+//				endTurn(); //3
+//				endTurn(); //4
+//				endTurn(); //5
+//				endTurn(); //6
+//				endTurn(); //7
+//				endTurn(); //8
+//				
 				
 				
-				Cell[] adj = c.giveAdjacentCells();
 				
-				for (int i = 0; i < adj.length; i++) {
-					if (adj[i] != null) {
-						//System.out.println(adj[i].isVisible());
-					}
-				}
-				int count = 0;
-				  for (int i = 0; i< 15; i++) {
-		                for (int j = 0; j< 15; j++) {
-		                    if (map[i][j].isVisible()) {
-		                    	count +=1;
-		                    }
-		                }
-		            }
-				  //System.out.println(count);
-				  //System.out.println(getRemainingVaccines());
-				  try {
-					c.attack();
-				} catch (NotEnoughActionsException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-				} catch (InvalidTargetException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-				}
+				
+				
 				printMap();
 				
 				
 				//System.out.println(map[(int)c.getLocation().getX()][(int)c.getLocation().getY()].isVisible());
 				
 			}
-	
+}
 	
 		
-	}
+	

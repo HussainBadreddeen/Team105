@@ -15,5 +15,10 @@ public class Explorer extends Hero {
         super.useSpecial();
         Game.setAllCellVisbility(true);
         }
+    
+    public void attack() throws NotEnoughActionsException, InvalidTargetException {
+		  super.attack();
+		  this.setActionsAvailable(getActionsAvailable() - 1);
+	  }
 
     }

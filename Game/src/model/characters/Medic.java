@@ -2,6 +2,8 @@ package model.characters;
 
 import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
+import exceptions.NotEnoughActionsException;
+import model.world.CharacterCell;
 
 public class Medic extends Hero {
 	//private int healAmount;
@@ -29,6 +31,11 @@ public class Medic extends Hero {
 
 	            }
 	        }
+	  
+	  public void attack() throws NotEnoughActionsException, InvalidTargetException {
+		  super.attack();
+		  this.setActionsAvailable(getActionsAvailable() - 1);
+	  }
 
 	    }
 	    

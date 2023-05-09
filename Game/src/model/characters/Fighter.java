@@ -12,7 +12,7 @@ public class Fighter extends Hero{
 	}
 	
 	
-	public void attack() throws NotEnoughActionsException, InvalidTargetException {
+	/*public void attack() throws NotEnoughActionsException, InvalidTargetException {
 		if (this.getTarget() instanceof Hero || this.getTarget() == null)
 			throw new InvalidTargetException();
 		
@@ -35,6 +35,14 @@ public class Fighter extends Hero{
 			//this.getTarget().onCharacterDeath();
 			//this.setTarget(null); //logic out of the window
 		}
+	}*/
+	
+	  public void attack() throws NotEnoughActionsException, InvalidTargetException {
+		  super.attack();
+		  if (!this.isSpecialAction())
+			  this.setActionsAvailable(getActionsAvailable() - 1);
+		  
+	  }
 			
 		
 		
@@ -69,4 +77,4 @@ public class Fighter extends Hero{
 	
 	
 	
-	}}
+	}

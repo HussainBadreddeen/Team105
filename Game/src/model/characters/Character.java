@@ -69,18 +69,16 @@ abstract public class Character { //convention public abstract not abstract publ
 	}
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException{ // when changed to
-		if (this.target != null) {
-			this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
-			this.target.defend(this);
-			if (this.target.getCurrentHp() == 0) {
-				//this.target.onCharacterDeath();
-				this.target = null;
-			}
-		}
+		if (this.target == null) 
+			throw new InvalidTargetException();
+			
 		
-		else {
-			throw new InvalidTargetException();//both have common invtrgtException but NotEnoughActionsException is specifc to hero so implemted in hero
-		}
+		
+		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
+		this.target.defend(this);
+		if (this.target.getCurrentHp() == 0) {
+			//this.target.onCharacterDeath();
+			this.target = null;}
 	
 		
 		//Include exceptions somehow for all attack methods
@@ -88,22 +86,24 @@ abstract public class Character { //convention public abstract not abstract publ
 		
 	
 	public void defend(Character c) { //this is zombie c is attacker
-		this.setTarget(c); 
 		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));
 		/*if (this.currentHp == 0)   //logic out of the window
 			c.target = null;*/
 	}
 	
 	public void onCharacterDeath() {
+		Point l = this.getLocation();
+		
+		int h = (int)(l.getX());
+		int w = (int)(l.getY());
+		
 		
 		if (this instanceof Hero) {
 			Game.heroes.remove(this);
 			}
 		
-		Point l = this.getLocation();
-		int h = (int)(l.getX());
-		int w = (int)(l.getY());
-		((CharacterCell)Game.map[h][w]).setCharacter(null);
+		
+		
 		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
@@ -123,6 +123,8 @@ abstract public class Character { //convention public abstract not abstract publ
 			Game.zombies.add(z);
 			Game.map[h][w] = new CharacterCell(z);
 		}
+		
+		((CharacterCell)Game.map[h][w]).setCharacter(null);
 	}	
 		
 	

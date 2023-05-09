@@ -1136,7 +1136,7 @@ public class M2PublicTests {
 			boolean visible = (boolean) isVisible.invoke(cell);
 
 			assertTrue("The visibility of cells should not be updated as the hero is dead. Expected visibility = true"
-					+ " but was false " + " " + visible, false == visible);
+					+ " but was false ", false == visible);
 
 		} catch (NoSuchMethodException e) {
 			fail("Hero class should have isVisible method");
@@ -1890,7 +1890,7 @@ public class M2PublicTests {
 
 		boolean isAllDead = heroList.size() <= 1;
 
-		assertEquals("All 8 heros around Zombie should be dead after attacking all of them" + " " + heroList.size(), true ,isAllDead);
+		assertEquals("All 8 heros around Zombie should be dead after attacking all of them", isAllDead, true);
 	}
 
 	@Test(timeout = 5000)
@@ -2247,10 +2247,9 @@ public class M2PublicTests {
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
-		boolean isD = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
-		boolean isDead = isD && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
-		
-		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array " + " " + isD + " ", isDead,
+		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
+		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
+		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
 				true);
 	}
 
@@ -4642,14 +4641,14 @@ public class M2PublicTests {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				if ((i <= x + 1 && j <= y + 1) && (i >= x - 1 && j >= y - 1)) {
-					System.out.println((boolean) fd.get(map[i][j]));
+
 					assertTrue(
 							"End turn should update the cells' visibility, heros' cells and their adjacent cells should be visible",
 							(boolean) fd.get(map[i][j]));
 				} else {
 
 					assertFalse(
-							"End turn should update the cells' visibility, ONLY heros' cells and their adjacent cells should be visible " + (boolean) fd.get(map[0][j]) ,
+							"End turn should update the cells' visibility, ONLY heros' cells and their adjacent cells should be visible",
 							(boolean) fd.get(map[i][j]));
 
 				}

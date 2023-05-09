@@ -25,23 +25,22 @@ public class Zombie extends Character{
 	}
 	
 	public void attack() throws InvalidTargetException, NotEnoughActionsException{
-		if(this.getCurrentHp()<=0) {
-			this.onCharacterDeath();
-		}
-		else {
+		
         Cell[] adj = this.giveAdjacentCells();
         for (int i = 0; i < adj.length; i++ ) {
             if (adj[i] != null) {
             	if (adj[i] instanceof CharacterCell) {
 	            	if (((CharacterCell)adj[i]).getCharacter() instanceof Hero) {
 	                    this.setTarget(((CharacterCell)adj[i]).getCharacter());
-	                    super.attack();
-				
-	                   break;
-                }}
+	                    this.getTarget().setCurrentHp(this.getTarget().getCurrentHp() - this.getAttackDmg());
+	            		this.getTarget().defend(this);
+	                    //this.setTarget(null);
+	                    break;
+                }
+	            	}
             	
  
-	}
+	
 	
 	
 }
