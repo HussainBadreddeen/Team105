@@ -1,14 +1,11 @@
 package model.collectibles;
-
 import java.awt.Point;
 import java.util.Random;
 
 import engine.Game;
-import exceptions.InvalidTargetException;
-import exceptions.NoAvailableResourcesException;
-import exceptions.NotEnoughActionsException;
-import model.characters.*; // to use for hero 
-import model.world.CharacterCell;
+import exceptions.*;
+import model.characters.*; 
+import model.world.*;
 
 public class Vaccine implements Collectible{
 	//removed the point variable, methods, constructor
@@ -16,27 +13,7 @@ public class Vaccine implements Collectible{
     public Vaccine() {
 		
 	}
-    
-	/*public boolean isHeroAtCollectible(Collectible collectible, Hero hero) {
-	    int collectibleX = (int)collectible.getLocation().getX();
-	    int collectibleY = (int)collectible.getLocation().getY();
-
-	    int heroX = (int) hero.getLocation().getX();
-	    int heroY = (int)hero.getLocation().getY();
-
-	    return (heroX == collectibleX) && (heroY == collectibleY);//true =same location
-	}*/ //not necessary, will be implemented in the game class
-
-    //Old PickUp Method
-    
-	@Override
-	/*public void pickUp(Hero h) {//implement location of collectible here?
-		if(isHeroAtCollectible(this, h)== true) {
-			h.addVaccine(this);//no handling 3shan already el size ad el fl le3ba?
-		}//end of if statement
-		//made a method in hero class and used it here. auto pickup?
-	    //logic implemented here not hero class	
-		}*/
+  //removed old commented hero at collectible method and old commented pickup method
 		
 	public void pickUp(Hero h) { //new pickUp Method
 		h.addVaccine(this);
@@ -67,7 +44,7 @@ public class Vaccine implements Collectible{
 			}
 		
 		else
-			throw new NoAvailableResourcesException();
+			throw new NoAvailableResourcesException("You dont have enough actions to cure!");
 		
 	}
 

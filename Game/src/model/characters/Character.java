@@ -6,7 +6,7 @@ import exceptions.*;
 import model.world.*;
 
 
-abstract public class Character { //convention public abstract not abstract public
+public abstract class Character { //changed to convention which is public abstract not abstract public
 	private String name;
 	private Point location;
 	private int maxHp;
@@ -68,25 +68,21 @@ abstract public class Character { //convention public abstract not abstract publ
 		this.target = target;
 	}
 	
-	public void attack() throws NotEnoughActionsException, InvalidTargetException{ // when changed to
+	public void attack() throws NotEnoughActionsException, InvalidTargetException{
 		if (this.target == null) 
-			throw new InvalidTargetException();
+			throw new InvalidTargetException("No target selected! Please select a valid target!");
 			
-		
-		
 		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 		this.target.defend(this);
 		if (this.target.getCurrentHp() == 0) {
 			//this.target.onCharacterDeath();
 			this.target = null;}
-	
-		
-		//Include exceptions somehow for all attack methods
+		//Include exceptions somehow for all attack methods//Done
 		}
 		
 	
-	public void defend(Character c) { //this is zombie c is attacker
-		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));
+	public void defend(Character c) { //Ex:this is zombie. c is attacker.
+		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));//we set attacker currHp with half of Zombie's Dmg when zombie def
 		/*if (this.currentHp == 0)   //logic out of the window
 			c.target = null;*/
 	}
@@ -152,15 +148,7 @@ abstract public class Character { //convention public abstract not abstract publ
 	}
 		return adjCells;
 	}
-	
-	/*public boolean isAdjacent(Character c) {
-		Cell[] adj = this.giveAdjacentCells();
-		for (int i = 0; i < adj.length; i++) {
-			if (((CharacterCell)adj[i]).getCharacter().equals(c))
-				return true;
-		}
-		return false;
-	}*/
+//removed old commented isAdjacent method
 	
 	public boolean isAdjacent(Character c) {
 		int x1 = (int)this.getLocation().getY();
