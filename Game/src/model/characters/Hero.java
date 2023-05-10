@@ -92,9 +92,14 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
         	throw new InvalidTargetException("Target isn't close enough or target is not hero!");
         if (this.getActionsAvailable() <= 0)
         	throw new NotEnoughActionsException("You dont have enough actions to cure!");
-        
-        Vaccine v = this.vaccineInventory.get(0);
-        v.use(this);
+    	if (this.getCurrentHp() <=0) {//added this
+        	this.onCharacterDeath();//added this
+        }//added this
+    	else {//added this
+    		 Vaccine v = this.vaccineInventory.get(0);//added this
+    	     v.use(this);//added this
+    	}//added this
+       
   
     }
 		
@@ -106,6 +111,7 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
         else {
             this.getSupplyInventory().remove(0);
             this.setSpecialAction(true);
+            this.specialAction = true;
             }
     }
 		
