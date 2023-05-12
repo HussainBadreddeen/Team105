@@ -72,7 +72,6 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 		if (this.getTarget() instanceof Hero || this.getTarget() == null)
 			throw new InvalidTargetException("This isn't a zombie dude");
 		
-		
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException("You dont have enough actions");}
 		
@@ -92,32 +91,33 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
         	throw new InvalidTargetException("Target isn't close enough or target is not hero!");
         if (this.getActionsAvailable() <= 0)
         	throw new NotEnoughActionsException("You dont have enough actions to cure!");
-    	if (this.getCurrentHp() <=0) {//added this
-        	this.onCharacterDeath();//added this
-        }//added this
-    	else {//added this
-    		 Vaccine v = this.vaccineInventory.get(0);//added this
-    	     v.use(this);//added this
-    	}//added this
+//    	if (this.getCurrentHp() <=0) {//added this
+//        	this.onCharacterDeath();//added this
+//        }//added this
+    	//else {//added this
+    	Vaccine v = this.vaccineInventory.get(0);//added this
+    	v.use(this);//added this
+    	//}//added this
        
   
     }
 		
 	
-	public void useSpecial() throws Exception{ //changed from NoAvailableResourcesException to Exception
+	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException{ //changed from NoAvailableResourcesException to Exception
 		if (this.getSupplyInventory().isEmpty()) {//was == null changed to .isEmpty()
             throw new NoAvailableResourcesException("You dont have enough Supplies or Vaccines!");
     }
         else {
-            this.getSupplyInventory().remove(0);
+            this.getSupplyInventory().get(0).use(this);;
             this.setSpecialAction(true);
-            this.specialAction = true;
             }
     }
 		
 	
 	public void move(Direction d) throws MovementException, NotEnoughActionsException {
-		if(this.getActionsAvailable()>0) {
+		if(this.getActionsAvailable() <= 0) 
+			throw new NotEnoughActionsException("You dont have enough actions to move!");
+		
 		int moveNum = 0;
 		boolean moveYAxis = false;
 		if (d == Direction.LEFT) {
@@ -143,7 +143,7 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 		
 		int h = (int)this.getLocation().getX();
 		int w = (int)this.getLocation().getY();
-		int dmg = 0;
+
 		
 		if (moveYAxis) 
 			h += moveNum;
@@ -151,32 +151,24 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 			w += moveNum;
 		
 		
-		//Point newLocation = new Point(y, x);
-		if (this.getActionsAvailable() == 0)
-			throw new NotEnoughActionsException("You dont have enough actions to move!");
-		
-		
 		if (moveYAxis && ((h < 0) || (h >= 15))) {
 			throw new MovementException("You can't go outside the map! (right or left)");  
 
 		}
-		if (!moveYAxis && ((w < 0) || (w >= 15))) {
+		else if (!moveYAxis && ((w < 0) || (w >= 15))) {
 			throw new MovementException("You can't go outside the map! (up or down)");  
 			
 		}
 		
 		
-		
 		if ((Game.map[h][w] instanceof CollectibleCell)) {
 			((CollectibleCell)Game.map[h][w]).getCollectible().pickUp(this);
-			
-			
+		
 		}
 		
 		else if ((Game.map[h][w] instanceof TrapCell)) {
-			dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
+			int dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
 			this.setCurrentHp(this.getCurrentHp() - dmg);
-			
 			
 		}
 		
@@ -189,19 +181,19 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 		this.setActionsAvailable(this.getActionsAvailable() - 1);
 		if (this.getCurrentHp() > 0) {
 			Game.map[h][w] = new CharacterCell(this, true);
-			this.makeAdjacentVisible();}
-		
-		
+			this.makeAdjacentVisible();
+			}
+	
 		int oldH = (int)this.getLocation().getX();
 		int oldY = (int)this.getLocation().getY();
 		
 		this.setLocation(new Point(h, w));
 		((CharacterCell)Game.map[oldH][oldY]).setCharacter(null);
 	}
-		else {//mafeesh actions kfaya yt7rk
-			throw new NotEnoughActionsException("You dont have enough actions to move!");
-		}
-	}
+		
+			
+		
+	
 	
 	
 	public void makeAdjacentVisible() {

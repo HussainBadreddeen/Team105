@@ -20,18 +20,16 @@ public class Zombie extends Character{
 		
         Cell[] adj = this.giveAdjacentCells();
         for (int i = 0; i < adj.length; i++ ) {
-            if (adj[i] != null) {
-            	if (adj[i] instanceof CharacterCell) {
-	            	if (((CharacterCell)adj[i]).getCharacter() instanceof Hero) {
-	                    this.setTarget(((CharacterCell)adj[i]).getCharacter());
-	                    this.getTarget().setCurrentHp(this.getTarget().getCurrentHp() - this.getAttackDmg());
-	            		this.getTarget().defend(this);
-	                    //this.setTarget(null);
-	                    break;
-	                    }
-	            	}
+        	if (adj[i] instanceof CharacterCell) {
+            	if (((CharacterCell)adj[i]).getCharacter() instanceof Hero) {
+                    this.setTarget(((CharacterCell)adj[i]).getCharacter());
+                    super.attack();
+                    //this.setTarget(null); in endTurn method
+                    break;
+                    }
             	}
-            }
+        	}
         }
-	}
+    }
+
 	

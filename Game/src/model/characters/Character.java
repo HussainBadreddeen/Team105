@@ -69,22 +69,20 @@ public abstract class Character { //changed to convention which is public abstra
 	}
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException{
-		if (this.target == null) 
-			throw new InvalidTargetException("No target selected! Please select a valid target!");
-			
 		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 		this.target.defend(this);
-		if (this.target.getCurrentHp() == 0) {
-			//this.target.onCharacterDeath();
-			this.target = null;}
-		//Include exceptions somehow for all attack methods//Done
+		
+		if (this.target.getCurrentHp() == 0) 
+			this.target = null;
+		
 		}
 		
 	
 	public void defend(Character c) { //Ex:this is zombie. c is attacker.
+		this.target = c;
 		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));//we set attacker currHp with half of Zombie's Dmg when zombie def
-		/*if (this.currentHp == 0)   //logic out of the window
-			c.target = null;*/
+		if (c.currentHp == 0)   //logic out of the window
+			this.target = null;
 	}
 	
 	public void onCharacterDeath() {
@@ -100,25 +98,9 @@ public abstract class Character { //changed to convention which is public abstra
 			}
 		
 		
-		
-		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
-			boolean flag = true;
-			do {
-				h = Game.randomPosition();
-				w = Game.randomPosition();
-				if (Game.map[h][w] instanceof CharacterCell) {
-					if (((CharacterCell)(Game.map[h][w])).getCharacter() == null)
-						flag = false;
-				}	
-			}
-			while (flag);
-			
-			Zombie z = new Zombie();
-			z.setLocation(new Point(h, w));
-			Game.zombies.add(z);
-			Game.map[h][w] = new CharacterCell(z);
+			Game.spawnZombie();
 		}
 		
 	}	
@@ -162,21 +144,6 @@ public abstract class Character { //changed to convention which is public abstra
 			return false;
 		return true;
 	
-	}
-	public static boolean isCharacterAtLocation(Point l) {
-		boolean CharacterAtLocation = false;
-		for (int i = 0 ; i < (Game.heroes).size(); i++) {
-			
-			if (Game.heroes.get(i).getLocation().equals(l)) {
-				CharacterAtLocation =  true;
-			}
-			
-			if (Game.zombies.get(i).getLocation().equals(l)) {
-				CharacterAtLocation =  true;
-			}
-			
-		}
-		return CharacterAtLocation;
 	}
 	
 	}

@@ -10,13 +10,11 @@ public class Supply implements Collectible {
 	 
     }
 	
-	@Override
-	public void pickUp(Hero h) {//implement location of collectible here?
+	public void pickUp(Hero h) {
 		h.addSupply(this);
-		//made a method in hero class and used it here. auto pickup?yes
+		
 	}
-	//removed old commented implementation of pickup
-	@Override
+	
 	public void use(Hero h) throws NoAvailableResourcesException {
 		h.removeSupply();
 	}

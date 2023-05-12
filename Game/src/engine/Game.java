@@ -57,6 +57,26 @@ public class Game {
 			return (int)(Math.random() * 15);
 		}
 		
+		public static void spawnZombie() {
+			boolean flag = true;
+			int h;
+			int w;
+			do {
+				h = Game.randomPosition();
+				w = Game.randomPosition();
+				if (Game.map[h][w] instanceof CharacterCell) {
+					if (((CharacterCell)(Game.map[h][w])).getCharacter() == null)
+						flag = false;
+				}	
+			}
+			while (flag);
+			
+			Zombie z = new Zombie();
+			z.setLocation(new Point(h, w));
+			Game.zombies.add(z);
+			Game.map[h][w] = new CharacterCell(z);
+		}
+		
 		
 		public static void startGame(Hero h) {
 			//map = new Cell[15][15]; //intialized fo2 khlass when it solved zombieAttackDirections
@@ -166,8 +186,8 @@ public class Game {
 			for (int i = 0; i < heroes.size(); i++) {
 				count += heroes.get(i).getVaccineInventory().size();
 			}
-			
-			return (count == 0 || checkWin() || (heroes.size()==0) || availableHeroes.isEmpty());// added || availableHeroes.isEmpty()
+			  
+			return (count == 0 || checkWin() || heroes.isEmpty()); /*|| (availableHeroes.isEmpty()) || (heroes.size() + getRemainingVaccines()< 5));*/// added || availableHeroes.isEmpty()
 		}
 		
 		
@@ -195,43 +215,13 @@ public class Game {
 		
 		public static void endTurn() throws InvalidTargetException,NotEnoughActionsException{
             for (int i = 0; i < zombies.size();i++) {
-                Zombie z = zombies.get(i);
-				//try {
+                	Zombie z = zombies.get(i);
 					z.attack();
 					z.setTarget(null);
-				//} catch (InvalidTargetException e) {
-					// TODO Auto-generated catch block
-					
-				//} catch (NotEnoughActionsException e) {
-					// TODO Auto-generated catch block
-				
-				//}
-				
-               // z.setTarget(null);
             }
 
-            
-//we only spawn new zombie in 2 cases: if a zombie is dead or when a turn ends
-            //if (zombies.size() < 10) {//tab ma momken el hero my3mlsh cure bsor3a enough so zombies ykoon >10. s3tha msh hy spawn more zombies
-                int x;
-                int y;
-                boolean flag = true;
-                do {
-                    x = Game.randomPosition();
-                    y = Game.randomPosition();
-                    if (Game.map[y][x] instanceof CharacterCell) {
-                        if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
-                            flag = false;
-
-                    }}
-                while (flag);
-
-                Zombie z = new Zombie();
-                z.setLocation(new Point(y, x));
-                Game.zombies.add(z);
-                Game.map[y][x] = new CharacterCell(z);
-            //}
-
+            spawnZombie();
+            	
             setAllCellVisbility(false);
 
             for (int i = 0; i < heroes.size();i++) {

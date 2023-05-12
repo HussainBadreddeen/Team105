@@ -10,8 +10,9 @@ public class Fighter extends Hero{
 	}
       //removed commented attacks, new one is more efficient 
 	  public void attack() throws NotEnoughActionsException, InvalidTargetException {
-		  super.attack();//usespecial? hye3rf mnein enno zabat b2a true
+		  super.attack();
 		  if (!this.isSpecialAction())
 			  this.setActionsAvailable(getActionsAvailable() - 1); 
 	  }
+	  
 }

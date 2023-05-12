@@ -7,15 +7,12 @@ import exceptions.*;
 import model.characters.*; 
 import model.world.*;
 
-public class Vaccine implements Collectible{
-	//removed the point variable, methods, constructor
-	static int useCount;   
+public class Vaccine implements Collectible{ 
     public Vaccine() {
 		
 	}
-  //removed old commented hero at collectible method and old commented pickup method
 		
-	public void pickUp(Hero h) { //new pickUp Method
+	public void pickUp(Hero h) { 
 		h.addVaccine(this);
 		
 		
@@ -23,23 +20,24 @@ public class Vaccine implements Collectible{
 		
 
 	@Override
-	public void use(Hero h) throws NoAvailableResourcesException{//player can only win the game once all vaccines have been collected and used
-		//h.removeVaccine();// cure zombies and recruit new heroes here?
+	public void use(Hero h) throws NoAvailableResourcesException{
+		
 		if (h.getVaccineInventory().size() > 0) {
 			h.removeVaccine();
-			Vaccine.useCount += 1;
 			Game.zombies.remove(h.getTarget());
 			Point p = h.getTarget().getLocation();
+			h.setTarget(null);
+			
 	        
 	        Zombie.setZombiesCount();
 	 
 	        int randnum = new Random().nextInt(Game.availableHeroes.size());
 	        Hero hero = Game.availableHeroes.get(randnum);
-	        Game.heroes.add(hero);
 	        hero.setLocation(p);
-	        ((CharacterCell)Game.map[(int)p.getX()][(int)p.getY()]).setCharacter(hero);  //we put created hero in cured zombie's location
+	        ((CharacterCell)Game.map[(int)p.getX()][(int)p.getY()]).setCharacter(hero);  
+	        Game.heroes.add(hero);
 	        Game.availableHeroes.remove(hero);
-	     //   this.setTarget(null); // You should remove the hero's target from the Zombies array in Game expected:<0> but was:<1>
+	     
 	        h.setActionsAvailable(h.getActionsAvailable()-1);
 			}
 		
@@ -47,20 +45,5 @@ public class Vaccine implements Collectible{
 			throw new NoAvailableResourcesException("You dont have enough actions to cure!");
 		
 	}
-
-	public static int getUseCount() {
-		return useCount;
-	}
-
-	
-
-	
-
-	
-	
-
-
-
-
 
 }
