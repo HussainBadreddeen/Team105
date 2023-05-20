@@ -1,42 +1,35 @@
 package model.characters;
+import exceptions.*;
+import model.world.*;
 
-import exceptions.GameActionException;
-import exceptions.InvalidTargetException;
-import exceptions.NotEnoughActionsException;
-import model.world.Cell;
-import model.world.CharacterCell;
 
 public class Zombie extends Character{
-/*public*/ static int ZOMBIES_COUNT = 1; //remov private sol doesnt have private here
+    static int ZOMBIES_COUNT = 1; //removed private solution doesn't have private here
 	
-	public Zombie() {
+    public Zombie() {
 		super("Zombie " + ZOMBIES_COUNT++, 40, 10);
+		
 		//ZOMBIES_COUNT++; here in sol but our method works the same
 	}
-
-	public static int getZombiesCount() { //probably not needed
-		// TODO Auto-generated method stub
-		return ZOMBIES_COUNT;
-	}
-
-	public static void setZombiesCount() {//should only decrease by 1 //probably not needed
+//Removed GetZombiesCount since we do not use it
+	public static void setZombiesCount() {//should only decrease by 1 //probably not needed //We're using it in Game Engine.
 		ZOMBIES_COUNT --;
 	}
-	
+
 	public void attack() throws InvalidTargetException, NotEnoughActionsException{
+		
         Cell[] adj = this.giveAdjacentCells();
         for (int i = 0; i < adj.length; i++ ) {
-            if (adj[i] instanceof CharacterCell) {
+        	if (adj[i] instanceof CharacterCell) {
             	if (((CharacterCell)adj[i]).getCharacter() instanceof Hero) {
                     this.setTarget(((CharacterCell)adj[i]).getCharacter());
                     super.attack();
-			
-                   break;
-                }
-            	
- 
-	}
+                    //this.setTarget(null); in endTurn method
+                    break;
+                    }
+            	}
+        	}
+        }
+    }
+
 	
-	
-}
-        }}
