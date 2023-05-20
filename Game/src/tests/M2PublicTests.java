@@ -1307,7 +1307,7 @@ public class M2PublicTests {
 			m3.invoke(character);
 			int targetHP = (int) getCurrentHp.invoke(character2);
 
-			assertTrue("Attack method of Character class has to be used in Hero class with super keyword .",
+			assertTrue("Attack method of Character class has to be used in Hero class with super keyword . " +  targetHP1 + " " + attackDamage + " " + targetHP + " " + (targetHP == targetHP1 - attackDamage),
 					targetHP == targetHP1 - attackDamage);
 
 		} catch (NoSuchMethodException e) {
@@ -2357,7 +2357,7 @@ public class M2PublicTests {
 		Method getCurrentHpMethod = characterClass.getMethod("getCurrentHp");
 		int expectedHp = 40 - (attackDamage / 2);
 		int actualHp = (int) getCurrentHpMethod.invoke(character1);
-		assertEquals(expectedHp, actualHp);
+		assertEquals(("Print: " + expectedHp + " " + actualHp),expectedHp, actualHp);
 	}
 
 	@Test(timeout = 1000)

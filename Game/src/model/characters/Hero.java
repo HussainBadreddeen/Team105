@@ -1,14 +1,24 @@
 package model.characters;
+
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import engine.Game;
-import exceptions.*;
-import model.collectibles.*;
-import model.world.*;
+import exceptions.GameActionException;
+import exceptions.InvalidTargetException;
+import exceptions.MovementException;
+import exceptions.NoAvailableResourcesException;
+import exceptions.NotEnoughActionsException;
+import model.collectibles.Collectible;
+import model.collectibles.Supply;
+import model.collectibles.Vaccine;
+import model.world.Cell;
+import model.world.CharacterCell;
+import model.world.CollectibleCell;
+import model.world.TrapCell;
 
-
-public abstract class Hero extends Character{ //changed abstract pub to pub abstract for convention
+abstract public class Hero extends Character{
 	private int actionsAvailable;
 	private int maxActions;
 	private boolean specialAction;
@@ -69,55 +79,61 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 	}
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException{
-		if (this.getTarget() instanceof Hero || this.getTarget() == null)
-			throw new InvalidTargetException("This isn't a zombie dude");
-		
 		if (this.actionsAvailable <= 0) {
-			throw new NotEnoughActionsException("You dont have enough actions");}
+			throw new NotEnoughActionsException();}
 		
-		if(!this.isAdjacent(this.getTarget())) {
-			throw new InvalidTargetException("Target isn't close enough");
+		
+		else if (this.getTarget() instanceof Hero) {
+			throw new InvalidTargetException();
+		}
+		
+		
+		else if(!this.isAdjacent(this.getTarget())) {
+			throw new InvalidTargetException();
 		}
 		
 		super.attack();
-		
-		}
-		
-	
-	public void cure() throws NotEnoughActionsException, InvalidTargetException, NoAvailableResourcesException{ 
-		 if (this.getTarget() == null)
-	        	throw new InvalidTargetException();
-        if (!this.isAdjacent(this.getTarget()) || !(this.getTarget() instanceof Zombie))
-        	throw new InvalidTargetException("Target isn't close enough or target is not hero!");
-        if (this.getActionsAvailable() <= 0)
-        	throw new NotEnoughActionsException("You dont have enough actions to cure!");
-//    	if (this.getCurrentHp() <=0) {//added this
-//        	this.onCharacterDeath();//added this
-//        }//added this
-    	//else {//added this
-    	Vaccine v = this.vaccineInventory.get(0);//added this
-    	v.use(this);//added this
-    	//}//added this
-       
-  
-    }
+		this.actionsAvailable -=1;}
 		
 	
-	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException{ //changed from NoAvailableResourcesException to Exception
-		if (this.getSupplyInventory().isEmpty()) {//was == null changed to .isEmpty()
-            throw new NoAvailableResourcesException("You dont have enough Supplies or Vaccines!");
+			
+			
+		
+	
+	public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException{ 
+        if ((this.getTarget() instanceof Zombie)){
+            if(this.isAdjacent(getTarget())==true){
+             if(!(this.getActionsAvailable()==0)) {
+                if(!(this.getVaccineInventory().isEmpty())) {
+                    Point x = this.getTarget().getLocation();
+                    this.removeVaccine();
+                    //if(!Game.availableHeroes.isEmpty()) { remove
+                    int randnum = new Random().nextInt(Game.availableHeroes.size());
+                    Hero h = Game.availableHeroes.get(randnum);
+                    Game.heroes.add(h);
+                    h.setLocation(x);
+                    Game.availableHeroes.remove(h);
+                    this.setActionsAvailable(getActionsAvailable()-1);
+                }
+                }
+             }
+            }
+        }
+		
+	public void useSpecial() throws NoAvailableResourcesException{ 
+        if (this.getSupplyInventory() == null) {
+            throw new NoAvailableResourcesException();
     }
         else {
-            this.getSupplyInventory().get(0).use(this);;
+            this.getSupplyInventory().remove(0);
             this.setSpecialAction(true);
             }
     }
 		
-	
-	public void move(Direction d) throws MovementException, NotEnoughActionsException {
-		if(this.getActionsAvailable() <= 0) 
-			throw new NotEnoughActionsException("You dont have enough actions to move!");
 		
+	
+	
+	public void move(Direction d) throws Exception {
 		int moveNum = 0;
 		boolean moveYAxis = false;
 		if (d == Direction.LEFT) {
@@ -131,84 +147,95 @@ public abstract class Hero extends Character{ //changed abstract pub to pub abst
 		}
 		
 		else if (d == Direction.UP) {
-			moveNum = 1;   
+			moveNum = 1;
 			moveYAxis = true;
 		}
 		
 		else if (d == Direction.DOWN) {
-			moveNum = -1; 
+			moveNum = -1;
 			moveYAxis = true;
 		}
 		
 		
-		int h = (int)this.getLocation().getX();
-		int w = (int)this.getLocation().getY();
-
+		int x = (int)this.getLocation().getY();
+		int y = (int)this.getLocation().getX();
 		
-		if (moveYAxis) 
-			h += moveNum;
-		else 
-			w += moveNum;
+		if (moveYAxis)
+			y += moveNum;
+		else
+			x += moveNum;
 		
+		Point newLocation = new Point(y, x);
 		
-		if (moveYAxis && ((h < 0) || (h >= 15))) {
-			throw new MovementException("You can't go outside the map! (right or left)");  
+		if (moveYAxis && ((y < 0) || (y >= 15))) {
+			throw new MovementException();  
 
 		}
-		else if (!moveYAxis && ((w < 0) || (w >= 15))) {
-			throw new MovementException("You can't go outside the map! (up or down)");  
+		else if (!moveYAxis && ((x < 0) || (x >= 15))) {
+			throw new MovementException();  
 			
 		}
 		
-		
-		if ((Game.map[h][w] instanceof CollectibleCell)) {
-			((CollectibleCell)Game.map[h][w]).getCollectible().pickUp(this);
-		
-		}
-		
-		else if ((Game.map[h][w] instanceof TrapCell)) {
-			int dmg = ((TrapCell)Game.map[h][w]).getTrapDamage();
-			this.setCurrentHp(this.getCurrentHp() - dmg);
-			
-		}
-		
-		if ((Game.map[h][w] instanceof CharacterCell))
-			if (((CharacterCell)Game.map[h][w]).getCharacter() != null)
-				throw new MovementException("Cell occupied can't move there!");
-
-		
-			
-		this.setActionsAvailable(this.getActionsAvailable() - 1);
-		if (this.getCurrentHp() > 0) {
-			Game.map[h][w] = new CharacterCell(this, true);
+		else if ((Game.map[y][x] instanceof CollectibleCell)) {
+			((CollectibleCell)Game.map[y][x]).getCollectible().pickUp(this);
+			this.setActionsAvailable(this.getActionsAvailable() - 1);
+			Game.map[y][x] = new CharacterCell(this, true);
+			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
+			this.getLocation().move(y, x);
 			this.makeAdjacentVisible();
-			}
-	
-		int oldH = (int)this.getLocation().getX();
-		int oldY = (int)this.getLocation().getY();
-		
-		this.setLocation(new Point(h, w));
-		((CharacterCell)Game.map[oldH][oldY]).setCharacter(null);
-	}
-		
 			
+		}
 		
-	
-	
+		else if ((Game.map[y][x] instanceof TrapCell)) {
+			int dmg = ((TrapCell)Game.map[y][x]).getTrapDamage();
+			
+			this.setCurrentHp(this.getCurrentHp() - dmg);
+			this.setActionsAvailable(this.getActionsAvailable() - 1);
+			
+			Game.map[y][x] = new CharacterCell(this, true);
+			((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
+			this.getLocation().move(y, x);
+			this.makeAdjacentVisible();
+			
+		}
+		else if ((Game.map[y][x] instanceof CharacterCell) & (((CharacterCell)Game.map[y][x]).getCharacter() != null)){
+			throw new MovementException();
+				
+		}
+
+		
+		else {
+			this.setActionsAvailable(this.getActionsAvailable() - 1);
+			((CharacterCell)Game.map[y][x]).setCharacter(this);
+			//((CharacterCell)Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()]).setCharacter(null);
+			Game.map[(int)this.getLocation().getY()][(int)this.getLocation().getY()] = new CharacterCell(null);
+			this.getLocation().move(y, x);
+			this.makeAdjacentVisible();
+		}
+		
+		
+		
+	}
 	
 	public void makeAdjacentVisible() {
-
 		Cell[] adj = this.giveAdjacentCells();
-		int w = (int)this.getLocation().getY();
-		int h = (int)this.getLocation().getX();
-		Game.map[h][w].setVisible(true);
+		int x = (int)this.getLocation().getY();
+		int y = (int)this.getLocation().getX();
+		Game.map[y][x].setVisible(true);
 		for (int i = 0; i < adj.length;i++) {
 			if (adj[i] != null) {
 				adj[i].setVisible(true);
-				
 			}
 		}
-			
+		
 	}
 	
+
+
+
+	
+
+	
+
+
 }

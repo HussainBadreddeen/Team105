@@ -2,8 +2,6 @@ package model.characters;
 
 import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
-import exceptions.NotEnoughActionsException;
-import model.world.*;
 
 public class Medic extends Hero {
 	//private int healAmount;
@@ -14,24 +12,19 @@ public class Medic extends Hero {
 	}
 	
 	
-	  public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException{ 
+	  public void useSpecial() throws Exception{ //come back later bullshit exception failure
+	        super.useSpecial();
 	        if(this.getTarget() instanceof Zombie) {
-	           throw new InvalidTargetException("Cannot heal a zombie!");
+	            throw new InvalidTargetException();
 	        }
-	        if(!(this.getTarget().isAdjacent(this))) {
-	        	throw new InvalidTargetException("Target isn't close enough!");
-	        }
+	        else if(this.getSupplyInventory().isEmpty()) {
+	                throw new NoAvailableResourcesException();
+	            }
+	            else {//if character and med has enough supply
+	                this.getTarget().setCurrentHp(this.getTarget().getMaxHp());
 
-	       super.useSpecial();
-	       this.getTarget().setCurrentHp(this.getTarget().getMaxHp());
-
-	            
+	            }
 	        }
-	  
-	  public void attack() throws NotEnoughActionsException, InvalidTargetException {
-		  super.attack();
-		  this.setActionsAvailable(getActionsAvailable() - 1);
-	  }
 
 	    }
 	    

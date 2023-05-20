@@ -2,11 +2,13 @@ package model.characters;
 
 import java.awt.Point;
 import engine.Game;
-import exceptions.*;
-import model.world.*;
+import exceptions.GameActionException;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+import model.world.Cell;
+import model.world.CharacterCell;
 
-
-public abstract class Character { //changed to convention which is public abstract not abstract public
+abstract public class Character { //convention public abstract not abstract public
 	private String name;
 	private Point location;
 	private int maxHp;
@@ -46,10 +48,8 @@ public abstract class Character { //changed to convention which is public abstra
 	}
 	
 	public void setCurrentHp(int currentHp) {
-		if(currentHp <= 0) {
+		if(currentHp < 0) 
 			this.currentHp = 0;
-			this.onCharacterDeath(); 
-			}
 		else if(currentHp > maxHp) 
 			this.currentHp = maxHp;
 		else 
@@ -69,41 +69,60 @@ public abstract class Character { //changed to convention which is public abstra
 	}
 	
 	public void attack() throws NotEnoughActionsException, InvalidTargetException{
-		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
-		this.target.defend(this);
+		if (this.target != null) {
+			this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
+			this.target.defend(this);
 		
-		if (this.target.getCurrentHp() == 0) 
-			this.target = null;
+			if (this.target.currentHp <= 0) 
+				this.target.onCharacterDeath();
+			}
+	
 		
+		//Include exceptions somehow for all attack methods
 		}
 		
 	
-	public void defend(Character c) { //Ex:this is zombie. c is attacker.
-		this.target = c;
-		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));//we set attacker currHp with half of Zombie's Dmg when zombie def
-		if (c.currentHp == 0)   //logic out of the window
-			this.target = null;
+	public void defend(Character c) { //this is zombie c is attacker
+		this.setTarget(c); 
+		c.setCurrentHp(c.getCurrentHp() - (int)(this.getAttackDmg()/2));
+		if (this.currentHp <= 0) 
+			this.onCharacterDeath();
 	}
 	
 	public void onCharacterDeath() {
-		Point l = this.getLocation();
-		
-		int h = (int)(l.getX());
-		int w = (int)(l.getY());
-
-		((CharacterCell)Game.map[h][w]).setCharacter(null);
 		
 		if (this instanceof Hero) {
-			Game.heroes.remove(this);
-			}
+			Game.heroes.remove(this);}
 		
+			
+			
+		
+		
+		Point l = this.getLocation();
+		int x = (int)(l.getY());
+		int y = (int)(l.getX());
+		Game.map[y][x] = new CharacterCell(null, true);
+			
 		
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
-			Game.spawnZombie();
-		}
-		
-	}	
+			boolean flag = true;
+			do {
+				x = Game.randomPosition();
+				y = Game.randomPosition();
+				if (Game.map[y][x] instanceof CharacterCell) {
+					if (((CharacterCell)(Game.map[y][x])).getCharacter() == null)
+						flag = false;
+					
+				}}
+			while (flag);
+			
+			Zombie z = new Zombie();
+			z.setLocation(new Point(y, x));
+			Game.zombies.add(z);
+			Game.map[y][x] = new CharacterCell(z);
+			
+			}}
 		
 	
 	
@@ -111,17 +130,15 @@ public abstract class Character { //changed to convention which is public abstra
 	public Cell[] giveAdjacentCells() {
 		Cell[] adjCells = new Cell[8];
 		Point l = this.getLocation();
-		int h = (int)l.getX() + 1; //13
-		int w = (int)l.getY() - 1; //1
+		int x = (int)l.getX() - 1; //13
+		int y = (int)l.getY() + 1; //1
 		int count = 0;
 
 		for (int i = 0; i < 3;i++) {
-			if (h - i < 15 && h - i >= 0) {
+			if (y - i < 15 && y - i >= 0) {
 				for (int j = 0; j < 3; j++) {
-					if (w + j < 15 && w + j >= 0) {
-						adjCells[count] = Game.map[h - i][w + j];
-						int a = h - i;
-						int b = w + j;
+					if (x + j < 15 && x + j >= 0) {
+						adjCells[count] = Game.map[y - i][x + j];
 						count++;}
 					if (i == 1)
 						j++;
@@ -130,7 +147,15 @@ public abstract class Character { //changed to convention which is public abstra
 	}
 		return adjCells;
 	}
-//removed old commented isAdjacent method
+	
+	/*public boolean isAdjacent(Character c) {
+		Cell[] adj = this.giveAdjacentCells();
+		for (int i = 0; i < adj.length; i++) {
+			if (((CharacterCell)adj[i]).getCharacter().equals(c))
+				return true;
+		}
+		return false;
+	}*/
 	
 	public boolean isAdjacent(Character c) {
 		int x1 = (int)this.getLocation().getY();
@@ -144,6 +169,21 @@ public abstract class Character { //changed to convention which is public abstra
 			return false;
 		return true;
 	
+	}
+	public static boolean isCharacterAtLocation(Point l) {
+		boolean CharacterAtLocation = false;
+		for (int i = 0 ; i < (Game.heroes).size(); i++) {
+			
+			if (Game.heroes.get(i).getLocation().equals(l)) {
+				CharacterAtLocation =  true;
+			}
+			
+			if (Game.zombies.get(i).getLocation().equals(l)) {
+				CharacterAtLocation =  true;
+			}
+			
+		}
+		return CharacterAtLocation;
 	}
 	
 	}

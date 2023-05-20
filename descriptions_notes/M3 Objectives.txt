@@ -1,0 +1,6 @@
+1) HUD and Sounds, find assets
+2) Buttons and Map Placement
+3)Button audio clicks
+4) Animation for attack, move, special action
+5) Integration backend and frontend
+6) Fix Video
