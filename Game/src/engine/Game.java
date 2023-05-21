@@ -10,6 +10,8 @@ import model.characters.Character;//for some reason we need this bec. the one ab
 import model.collectibles.*;
 import model.world.*;
 import exceptions.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -26,10 +28,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaMarkerEvent;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+import javafx.scene.media.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -311,7 +310,8 @@ public class Game extends Application {
 						Group settingsRoot = new Group();
 						Scene settingsScene = new Scene(settingsRoot, 1000, 600, Color.BLACK);
 
-						Font font = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
+						Font font = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 150);
+						//Font font = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
 
 						//Main Menu Scene
 
@@ -327,7 +327,8 @@ public class Game extends Application {
 
 
 
-					    Font font1 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
+					    Font font1 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 75);
+					    // Font font1 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
 
 					    start.setFont(font1);
 					    settings.setFont(font1);
@@ -348,19 +349,28 @@ public class Game extends Application {
 					    start.setStyle("-fx-background-color: transparent");
 					    settings.setStyle("-fx-background-color: transparent");
 					    exit.setStyle("-fx-background-color: transparent");
-
-
-
-					    String path = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S1.mp3";
+					    
+					    //audio theme song
+					    String pathSong = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/The_Last_Of_us_Theme_song.mp3";
+					   // String pathSong = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/The_Last_Of_us_Theme_song.mp3";
+					    Media mediaSong = new Media(new File(pathSong).toURI().toString());
+					    MediaPlayer ThemeSong = new MediaPlayer(mediaSong);
+					    Duration StartSongTime = Duration.millis(2800); //delay song start till after Team105
+					    
+					    
+					    String path = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/S1.mp3";
+					   //String path = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S1.mp3";
 					    Media media = new Media(new File(path).toURI().toString());
 					    MediaPlayer hoverSound = new MediaPlayer(media);
 
-					    String path2 = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S2.mp3";
+					  
+					    String path2 = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/S1.mp3";
+					  //String path2 = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S2.mp3";
 					    Media media2 = new Media(new File(path2).toURI().toString());
 					    MediaPlayer clickSound = new MediaPlayer(media2);
-
-					    File video = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");
-
+					   
+					    File video = new File("/C:/Users/hussa/Desktop/LastOfUsMenu.mp4"); //seeno path
+					    // File video = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
 					    Media media3 = new Media(video.toURI().toString());
 					    MediaPlayer vid = new MediaPlayer(media3);
 					    MediaView menuVid = new MediaView(vid);
@@ -370,11 +380,22 @@ public class Game extends Application {
 					    mvw.bind(Bindings.selectDouble(menuVid.sceneProperty(), "width"));
 					    mvh.bind(Bindings.selectDouble(menuVid.sceneProperty(), "height"));
 					    menuVid.setPreserveRatio(true);
+					    Duration RestartVideoTime = Duration.millis(7600); //restart vid after effects and button show
 
 
 
 					    menuRoot.getChildren().addAll(menuVid, menu);
 					    vid.play();
+					    
+					    Timeline timeline1 = new Timeline(new KeyFrame(StartSongTime, event -> vid.play()));
+				        timeline1.play();
+				        vid.setOnEndOfMedia(() -> vid.seek(RestartVideoTime));//restart video at 7.6 sec after ending
+				        
+				        
+					    Timeline timeline2 = new Timeline(new KeyFrame(StartSongTime, event -> ThemeSong.play()));
+				        timeline2.play();//to play song after Team105
+				        ThemeSong.setOnEndOfMedia(() -> ThemeSong.seek(Duration.ZERO));//restart song check documentaion
+					    
 
 
 					    media3.getMarkers().put("Menu Display", Duration.millis(7400));
@@ -385,8 +406,8 @@ public class Game extends Application {
 
 
 
-					    Font font2 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
-
+					    Font font2 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 85);
+					    //Font font2 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
 
 					    //start button
 					    start.setOnMouseClicked(new EventHandler <Event>(){
@@ -468,6 +489,11 @@ public class Game extends Application {
 					    //double zoomFactor = 1.0;
 
 						//Settings
+					    
+					    //need to add buttons for play,pause, stop and adjust volume
+//					    ThemeSong.pause();
+//					    ThemeSong.play();
+//					    ThemeSong.stop();
 
 					    ImageView settingsBox = new ImageView(new Image("/medBox.png", 750, 500, false, false));
 					    settingsBox.setX(300);
