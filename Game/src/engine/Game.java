@@ -15,6 +15,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -324,9 +325,7 @@ public class Game extends Application {
 					    Button start = new Button("START GAME");
 					    Button settings = new Button("SETTINGS");
 					    Button exit = new Button("EXIT");
-
-
-
+  
 					    Font font1 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 75);
 					    // Font font1 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
 
@@ -350,21 +349,50 @@ public class Game extends Application {
 					    settings.setStyle("-fx-background-color: transparent");
 					    exit.setStyle("-fx-background-color: transparent");
 					    
+					    
+					    //after pressing start game
+					    Button singlePlayer = new Button("SINGLEPLAYER");
+					    Button multiPlayer = new Button("MULTIPLAYER");					    
+					
+					    singlePlayer.setFont(font1);
+					    multiPlayer.setFont(font1);
+					    singlePlayer.setTextFill(Color.WHITE);
+					    multiPlayer.setTextFill(Color.WHITE);
+					    singlePlayer.setStyle("-fx-background-color: transparent");
+					    multiPlayer.setStyle("-fx-background-color: transparent");
+					    
+					    singlePlayer.setLayoutX(650);
+					    multiPlayer.setLayoutX(958);
+					    
+					    singlePlayer.setLayoutY(700);
+					    multiPlayer.setLayoutY(700);
+					    
+					    start.setOnAction(new EventHandler<ActionEvent>() {
+			                public void handle(ActionEvent event) {
+			                    menu.getChildren().removeAll(start,settings);
+			                    menu.getChildren().addAll(singlePlayer, multiPlayer);
+			                }
+			            });
+					    //create back button here
+					    
+					    
+					    
+					    
+					    
 					    //audio theme song
-					    String pathSong = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/The_Last_Of_us_Theme_song.mp3";
-					   // String pathSong = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/The_Last_Of_us_Theme_song.mp3";
+					    String pathSong = "src/The_Last_Of_us_Theme_song.mp3";//relative path
 					    Media mediaSong = new Media(new File(pathSong).toURI().toString());
 					    MediaPlayer ThemeSong = new MediaPlayer(mediaSong);
 					    Duration StartSongTime = Duration.millis(2800); //delay song start till after Team105
 					    
 					    
-					    String path = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/S1.mp3";
+					    String path = "src/S1.mp3";//relative path
 					   //String path = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S1.mp3";
 					    Media media = new Media(new File(path).toURI().toString());
 					    MediaPlayer hoverSound = new MediaPlayer(media);
 
 					  
-					    String path2 = "/C:/Users/hussa/Desktop/Team105/GameAssets/useful/S1.mp3";
+					    String path2 = "src/S1.mp3";//relative path
 					  //String path2 = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/useful/S2.mp3";
 					    Media media2 = new Media(new File(path2).toURI().toString());
 					    MediaPlayer clickSound = new MediaPlayer(media2);
@@ -380,7 +408,7 @@ public class Game extends Application {
 					    mvw.bind(Bindings.selectDouble(menuVid.sceneProperty(), "width"));
 					    mvh.bind(Bindings.selectDouble(menuVid.sceneProperty(), "height"));
 					    menuVid.setPreserveRatio(true);
-					    Duration RestartVideoTime = Duration.millis(7600); //restart vid after effects and button show
+					    Duration RestartVideoTime = Duration.millis(7800); //restart vid after effects and button show
 
 
 
@@ -389,12 +417,12 @@ public class Game extends Application {
 					    
 					    Timeline timeline1 = new Timeline(new KeyFrame(StartSongTime, event -> vid.play()));
 				        timeline1.play();
-				        vid.setOnEndOfMedia(() -> vid.seek(RestartVideoTime));//restart video at 7.6 sec after ending
+				        vid.setOnEndOfMedia(() -> vid.seek(RestartVideoTime));//restart video at 7.8 sec after ending
 				        
 				        
 					    Timeline timeline2 = new Timeline(new KeyFrame(StartSongTime, event -> ThemeSong.play()));
-				        timeline2.play();//to play song after Team105
-				        ThemeSong.setOnEndOfMedia(() -> ThemeSong.seek(Duration.ZERO));//restart song check documentaion
+				        timeline2.play();//to play song after Team105 //song bt5lls then gap then restart
+				        ThemeSong.setOnEndOfMedia(() -> ThemeSong.seek(Duration.ZERO));//restart song 
 					    
 
 
@@ -418,8 +446,7 @@ public class Game extends Application {
 
 					    	}
 					    });
-
-
+					
 
 					    start.setOnMouseEntered(new EventHandler <Event>(){
 					    	public void handle (Event event){
@@ -465,6 +492,69 @@ public class Game extends Application {
 
 					    	}
 					    });
+					    
+					    
+					    //SINGLEPLAYER button
+					    singlePlayer.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		clickSound.play();
+					    		clickSound.seek(clickSound.getStartTime());
+					    		stage.setScene(startScene);
+
+					    	}
+					    });
+					
+
+					    singlePlayer.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		singlePlayer.setFont(font2);
+					    		hoverSound.play();
+					    		hoverSound.seek(hoverSound.getStartTime());
+
+
+					    	}
+					    });
+
+					    singlePlayer.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		singlePlayer.setFont(font1);
+
+
+					    	}
+					    });
+					    
+					    
+					    //MULTIPLAYER button //currentl single and multi open map
+					    multiPlayer.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		clickSound.play();
+					    		clickSound.seek(clickSound.getStartTime());
+					    		stage.setScene(startScene);
+
+					    	}
+					    });
+					
+
+					    multiPlayer.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		multiPlayer.setFont(font2);
+					    		hoverSound.play();
+					    		hoverSound.seek(hoverSound.getStartTime());
+
+
+					    	}
+					    });
+
+					    multiPlayer.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		multiPlayer.setFont(font1);
+
+
+					    	}
+					    });
+					    
+					    
+					    
 
 					    //Exit Button
 
