@@ -307,6 +307,9 @@ public class Game extends Application {
 
 						Group startRoot = new Group();
 						Scene startScene = new Scene(startRoot, 1000, 600, Color.BLACK);
+						
+						//	Group afterstartRoot = new Group();
+						//	Scene afterstartScene = new Scene(afterstartRoot,1536, 864);
 
 						Group settingsRoot = new Group();
 						Scene settingsScene = new Scene(settingsRoot, 1000, 600, Color.BLACK);
@@ -418,10 +421,10 @@ public class Game extends Application {
 					    MediaPlayer vid2 = new MediaPlayer(media4);
 					    MediaView CharacterSelectionVid = new MediaView(vid);
 
-					    DoubleProperty mvw2 = menuVid.fitWidthProperty();
-					    DoubleProperty mvh2 = menuVid.fitHeightProperty();
-					    mvw.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "width"));
-					    mvh.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "height"));
+					    DoubleProperty mvw2 = CharacterSelectionVid.fitWidthProperty();
+					    DoubleProperty mvh2 = CharacterSelectionVid.fitHeightProperty();
+					    mvw2.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "width"));
+					    mvh2.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "height"));
 					    CharacterSelectionVid.setPreserveRatio(true);
 					    
 
