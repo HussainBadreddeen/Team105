@@ -311,8 +311,9 @@ public class Game extends Application {
 						Group settingsRoot = new Group();
 						Scene settingsScene = new Scene(settingsRoot, 1000, 600, Color.BLACK);
 
-						Font font = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 150);
+						//Font font = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 150);
 						//Font font = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
+						Font font = Font.loadFont("file:C:/Users/hussa/OneDrive/Desktop/Team105/GameAssets/gameFont.ttf", 150);
 
 						//Main Menu Scene
 
@@ -326,8 +327,9 @@ public class Game extends Application {
 					    Button settings = new Button("SETTINGS");
 					    Button exit = new Button("EXIT");
   
-					    Font font1 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 75);
+					    //Font font1 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 75);
 					    // Font font1 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
+					    Font font1 = Font.loadFont("file:C:/Users/hussa/OneDrive/Desktop/Team105/GameAssets/gameFont.ttf", 75);
 
 					    start.setFont(font1);
 					    settings.setFont(font1);
@@ -397,7 +399,7 @@ public class Game extends Application {
 					    Media media2 = new Media(new File(path2).toURI().toString());
 					    MediaPlayer clickSound = new MediaPlayer(media2);
 					   
-					    File video = new File("/C:/Users/hussa/Desktop/LastOfUsMenu.mp4"); //seeno path
+					    File video = new File("src/LastOfUsMenu.mp4"); //seeno path
 					    // File video = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
 					    Media media3 = new Media(video.toURI().toString());
 					    MediaPlayer vid = new MediaPlayer(media3);
@@ -410,7 +412,18 @@ public class Game extends Application {
 					    menuVid.setPreserveRatio(true);
 					    Duration RestartVideoTime = Duration.millis(7800); //restart vid after effects and button show
 
+					    //after choosing sinlge or multiplayer
+					    File video2 = new File("src/CHaracterSelectionMenu.mp4");
+					    Media media4 = new Media(video.toURI().toString());
+					    MediaPlayer vid2 = new MediaPlayer(media4);
+					    MediaView CharacterSelectionVid = new MediaView(vid);
 
+					    DoubleProperty mvw2 = menuVid.fitWidthProperty();
+					    DoubleProperty mvh2 = menuVid.fitHeightProperty();
+					    mvw.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "width"));
+					    mvh.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "height"));
+					    CharacterSelectionVid.setPreserveRatio(true);
+					    
 
 					    menuRoot.getChildren().addAll(menuVid, menu);
 					    vid.play();
@@ -434,8 +447,9 @@ public class Game extends Application {
 
 
 
-					    Font font2 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 85);
+					    //Font font2 = Font.loadFont("file:C:/Users/hussa/Desktop/Team105/GameAssets/gameFont.ttf", 85);
 					    //Font font2 = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
+					    Font font2 = Font.loadFont("file:C:/Users/hussa/OneDrive/Desktop/Team105/GameAssets/gameFont.ttf", 85);
 
 					    //start button
 					    start.setOnMouseClicked(new EventHandler <Event>(){
