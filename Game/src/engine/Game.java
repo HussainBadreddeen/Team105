@@ -308,8 +308,11 @@ public class Game extends Application {
 						Group startRoot = new Group();
 						Scene startScene = new Scene(startRoot, 1000, 600, Color.BLACK);
 						
-						//	Group afterstartRoot = new Group();
-						//	Scene afterstartScene = new Scene(afterstartRoot,1536, 864);
+						//for character selection
+						StackPane CharacterSelectionRoot = new StackPane();
+						Scene afterstartScene = new Scene(CharacterSelectionRoot, 1536, 864);
+						Pane CharacterSelection = new Pane();
+	
 
 						Group settingsRoot = new Group();
 						Scene settingsScene = new Scene(settingsRoot, 1000, 600, Color.BLACK);
@@ -382,6 +385,34 @@ public class Game extends Application {
 					    
 					    
 					    
+					    //after pressing start game
+					    Button Play = new Button("PLAY");
+					   					    
+					
+					    Play.setFont(font1);
+					    Play.setTextFill(Color.WHITE);
+					    Play.setStyle("-fx-background-color: transparent");
+					    
+					    Play.setLayoutX(650);					    
+					    Play.setLayoutY(700);
+					    
+					    
+					    singlePlayer.setOnAction(new EventHandler<ActionEvent>() {
+			                public void handle(ActionEvent event) {
+			                	CharacterSelection.getChildren().removeAll(Play);
+			                	//load map here
+			                }
+			            });
+					    
+					  multiPlayer.setOnAction(new EventHandler<ActionEvent>() {
+			                public void handle(ActionEvent event) {
+			                	CharacterSelection.getChildren().removeAll(Play);
+			                	//load map here
+			                }
+			            });
+					    
+				
+					    
 					    
 					    
 					    //audio theme song
@@ -417,15 +448,16 @@ public class Game extends Application {
 
 					    //after choosing sinlge or multiplayer
 					    File video2 = new File("src/CHaracterSelectionMenu.mp4");
-					    Media media4 = new Media(video.toURI().toString());
+					    Media media4 = new Media(video2.toURI().toString());
 					    MediaPlayer vid2 = new MediaPlayer(media4);
-					    MediaView CharacterSelectionVid = new MediaView(vid);
-
+					    MediaView CharacterSelectionVid = new MediaView(vid2);
 					    DoubleProperty mvw2 = CharacterSelectionVid.fitWidthProperty();
 					    DoubleProperty mvh2 = CharacterSelectionVid.fitHeightProperty();
 					    mvw2.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "width"));
 					    mvh2.bind(Bindings.selectDouble(CharacterSelectionVid.sceneProperty(), "height"));
 					    CharacterSelectionVid.setPreserveRatio(true);
+					    
+					   CharacterSelectionRoot.getChildren().addAll(CharacterSelectionVid, CharacterSelection);
 					    
 
 					    menuRoot.getChildren().addAll(menuVid, menu);
@@ -439,8 +471,11 @@ public class Game extends Application {
 					    Timeline timeline2 = new Timeline(new KeyFrame(StartSongTime, event -> ThemeSong.play()));
 				        timeline2.play();//to play song after Team105 //song bt5lls then gap then restart
 				        ThemeSong.setOnEndOfMedia(() -> ThemeSong.seek(Duration.ZERO));//restart song 
-					    
-
+					
+				        //for charcter selection vid but we play it in the button
+				        Timeline timeline3 = new Timeline(new KeyFrame(StartSongTime, event -> vid2.play()));
+				        vid2.setOnEndOfMedia(() -> vid2.seek(Duration.ZERO));//restart charachterSelectionVid
+				        
 
 					    media3.getMarkers().put("Menu Display", Duration.millis(7400));
 
@@ -516,8 +551,12 @@ public class Game extends Application {
 					    	public void handle (Event event){
 					    		clickSound.play();
 					    		clickSound.seek(clickSound.getStartTime());
-					    		stage.setScene(startScene);
-
+					    		stage.setScene(afterstartScene);
+					    		vid.pause();
+					    		timeline1.pause();
+					    		vid2.play();
+					    		timeline3.play();
+					    	    CharacterSelectionRoot.getChildren().addAll(Play);
 					    	}
 					    });
 					
@@ -546,8 +585,12 @@ public class Game extends Application {
 					    	public void handle (Event event){
 					    		clickSound.play();
 					    		clickSound.seek(clickSound.getStartTime());
-					    		stage.setScene(startScene);
-
+					    		stage.setScene(afterstartScene);
+					    		timeline1.pause();
+					    		vid.pause();
+					    		vid2.play();
+				    		    timeline3.play();
+								 CharacterSelectionRoot.getChildren().addAll(Play);
 					    	}
 					    });
 					
@@ -569,6 +612,37 @@ public class Game extends Application {
 
 					    	}
 					    });
+					    
+					    //Play button //opens map from character selection
+					    Play.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		clickSound.play();
+					    		clickSound.seek(clickSound.getStartTime());
+					    	//	stage.setScene(afterstartScene);//adj to map scene
+					    		vid2.pause();
+				    		    timeline3.pause();
+					    	}
+					    });
+					
+
+					    Play.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		Play.setFont(font2);
+					    		hoverSound.play();
+					    		hoverSound.seek(hoverSound.getStartTime());
+
+
+					    	}
+					    });
+
+					    Play.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		Play.setFont(font1);
+
+
+					    	}
+					    });
+					    
 					    
 					    
 					    
