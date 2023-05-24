@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
@@ -39,6 +40,7 @@ import javafx.scene.media.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -301,6 +303,11 @@ public class Game extends Application {
 
 
 				Group attackDownFighter;
+				int selectIndex = 0;
+
+		        Hero leftHero;
+		        Hero midHero;
+		        Hero rightHero;
 
 
 				public void start(Stage stage) {
@@ -327,14 +334,17 @@ public class Game extends Application {
 						/////////////////////////////////////////////////////////////////////
 
 
+
+
 						//MENU SCENE////////////////////////////////////////////////////////////
 
 						Button start = new Button("START GAME");
 					    Button settings = new Button("SETTINGS");
 					    Button exit = new Button("EXIT");
 
-					    File mainMenuFile = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
-						Media mainMenuVideo = new Media(mainMenuFile.toURI().toString());
+					    //File mainMenuFile = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
+					    File mainMenuFile = new File("src/LastOfUsMenu.mp4");//relative path
+					    Media mainMenuVideo = new Media(mainMenuFile.toURI().toString());
 					    MediaPlayer mainMenuPlayer = new MediaPlayer(mainMenuVideo);
 					    MediaView mainMenuMV = new MediaView(mainMenuPlayer);
 
@@ -357,9 +367,56 @@ public class Game extends Application {
 
 
 
-					    Font titleFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
-					    Font optionFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
-					    Font optionHoverFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
+//					    Font titleFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
+//					    Font optionFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
+//					    Font optionHoverFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
+
+						Font titleFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 150);
+						Font optionFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 75);
+					    Font optionHoverFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 85);
+						
+						
+						Button back = new Button("BACK");
+						back.setFont(optionFont);
+						back.setTextFill(Color.WHITE);
+						back.setStyle("-fx-background-color: transparent");
+//						title.setLayoutX(200);
+//					    title.setLayoutY(70);
+
+						Stack<Scene> backStack = new Stack<Scene>();
+
+						back.setOnMouseClicked(new EventHandler <Event>(){
+							public void handle(Event e){
+								clickSoundPlayer.play();
+					    		clickSoundPlayer.seek(clickSoundPlayer.getStartTime());
+								if (!backStack.isEmpty())
+									stage.setScene(backStack.pop());
+
+							}
+
+						});
+
+					    back.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		back.setFont(optionHoverFont);
+					    		hoverSoundPlayer.play();
+					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+
+					    	}
+					    });
+
+					    back.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		back.setFont(optionFont);
+
+
+					    	}
+					    });
+
+
+
 
 
 						Label title = new Label("THE \nLAST \nOF US \nLEGACY");
@@ -487,7 +544,8 @@ public class Game extends Application {
 
 
 
-				        String songPath = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/The_Last_Of_us_Theme_song.mp3";//relative path
+				        //String songPath = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/The_Last_Of_us_Theme_song.mp3";
+					    String songPath = "src/The_Last_Of_us_Theme_song.mp3";//check
 					    Media mediaSong = new Media(new File(songPath).toURI().toString());
 					    MediaPlayer songPlayer = new MediaPlayer(mediaSong);
 					    songPlayer.play();
@@ -549,7 +607,13 @@ public class Game extends Application {
 					    	public void handle (Event event){
 					    		clickSoundPlayer.play();
 					    		clickSoundPlayer.seek(clickSoundPlayer.getStartTime());
+
+
+							    backStack.push(startScene);
+
 					    		stage.setScene(charSelectScene);
+
+
 
 					    	}
 					    });
@@ -639,22 +703,436 @@ public class Game extends Application {
 //				            }
 //				        });
 
-				        Image [] FighterAttackDown = new Image[6];
 
-				        ImageView imageView = new ImageView();
-				        ArrayList<Image> images = new ArrayList<>();
-
+				        //loadHeroes("/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/Heros.csv");
+				        loadHeroes("/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/Heros.csv");
 
 
 
+				        ImageView[] visibleImages = new ImageView[3];
+
+				        if (selectIndex == 0)
+				        	leftHero = availableHeroes.get(availableHeroes.size() - 1);
+
+				        else
+				        	leftHero = availableHeroes.get(selectIndex - 1);
+
+				        midHero = availableHeroes.get(selectIndex);
+				        rightHero = availableHeroes.get((selectIndex + 1) % availableHeroes.size());
+
+				        Hero[] visibleHeroes = {leftHero, midHero, rightHero};
+
+				        Label heroName = new Label("Name: " + visibleHeroes[1].getName());
+				        Label heroHP = new Label("Max HP: " + visibleHeroes[1].getMaxHp());
+				        Label heroDmg = new Label("Attack Damage: " + visibleHeroes[1].getAttackDmg());
+				        Label heroActions = new Label("Max Actions: " + visibleHeroes[1].getMaxActions());
+				        Label heroClass = new Label("Class: Explorer");
+
+				        if (visibleHeroes[1] instanceof Fighter)
+				        	heroClass.setText("Class: Fighter");
+
+				        else if (visibleHeroes[1] instanceof Medic)
+				        	heroClass.setText("Class: Medic");
+
+				        heroName.setFont(optionFont);
+				        heroHP.setFont(optionFont);
+				        heroDmg.setFont(optionFont);
+				        heroActions.setFont(optionFont);
+				        heroClass.setFont(optionFont);
+
+				        heroName.setTextFill(Color.WHITE);
+				        heroHP.setTextFill(Color.WHITE);
+				        heroDmg.setTextFill(Color.WHITE);
+				        heroActions.setTextFill(Color.WHITE);
+				        heroClass.setTextFill(Color.WHITE);
+
+
+
+				        for (int i = 0; i < 3; i++){
+							if (visibleHeroes[i] instanceof Explorer){
+					        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+					        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+
+							}
+
+							else if (visibleHeroes[i] instanceof Medic){
+								//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+								visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+
+							}
+
+							else if (visibleHeroes[i] instanceof Fighter){
+								//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+								visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+
+							}}
+
+
+					    
+				        //ImageView nextHero = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/rightArrow.png"));
+					    ImageView nextHero = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/rightArrow.png"));
+				        nextHero.setLayoutX(1100);
+					    nextHero.setLayoutY(350);
+					    nextHero.setScaleX(5);
+					    nextHero.setScaleY(5);
+					    nextHero.setStyle("-fx-background-color: transparent");
+
+					   // ImageView prevHero = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/rightArrow.png"));
+					    ImageView prevHero = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/rightArrow.png"));
+					    prevHero.setRotate(180);
+					    prevHero.setLayoutX(300);
+					    prevHero.setLayoutY(350);
+					    prevHero.setScaleX(5);
+					    prevHero.setScaleY(5);
+					    prevHero.setStyle("-fx-background-color: transparent");
+
+					    Button selectHero = new Button("SELECT");
+					    selectHero.setFont(optionFont);
+					    selectHero.setTextFill(Color.WHITE);
+					    selectHero.setStyle("-fx-background-color: transparent");
+					    selectHero.setLayoutX(1300);
+					    selectHero.setLayoutY(0);
+
+					    Button play = new Button("PLAY");
+					    play.setFont(optionFont);
+					    play.setTextFill(Color.WHITE);
+					    play.setStyle("-fx-background-color: transparent");
+					    play.setLayoutX(1300);
+					    play.setLayoutY(750);
+
+					    play.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle(Event e){
+					    		//CHANGE SCENE PAUSE MV
+
+					    	}
+
+					    });
+
+					    play.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		play.setFont(optionHoverFont);
+					    		hoverSoundPlayer.play();
+					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+					    	}
+					    });
+
+					    play.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		play.setFont(optionFont);
+
+
+					    	}
+					    });
+
+
+					    selectHero.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle(Event e){
+					    		heroes.add(visibleHeroes[1]);
+					    		charSelectPane.getChildren().removeAll(nextHero, prevHero);
+					    		charSelectPane.getChildren().add(play);
+					    	}
+
+					    });
+
+					    selectHero.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		selectHero.setFont(optionHoverFont);
+					    		hoverSoundPlayer.play();
+					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+					    	}
+					    });
+
+					    selectHero.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		selectHero.setFont(optionFont);
+
+
+					    	}
+					    });
+
+
+					    nextHero.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle(Event e){
+					    		selectIndex = (selectIndex + 1) % availableHeroes.size();
+
+					    		//charSelectPane.getChildren().removeAll(visibleImages[0],visibleImages[1], visibleImages[2]);
+
+
+					    		if (selectIndex == 0)
+						        	leftHero = availableHeroes.get(availableHeroes.size() - 1);
+
+						        else
+						        	leftHero = availableHeroes.get(selectIndex - 1);
+
+						        midHero = availableHeroes.get(selectIndex);
+						        rightHero = availableHeroes.get((selectIndex + 1) % availableHeroes.size());
+
+
+						        Hero[] visibleHeroes = {leftHero, midHero, rightHero};
+
+
+
+					    		for (int i = 0; i < 3; i++){
+									if (visibleHeroes[i] instanceof Explorer){
+							        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));}
+						        		visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));}
+
+									else if (visibleHeroes[i] instanceof Medic){
+										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));}
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));}
+
+									else if (visibleHeroes[i] instanceof Fighter){
+										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));}}
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));}}
+
+					    		charSelectPane.getChildren().addAll(visibleImages[0],visibleImages[1], visibleImages[2]);
+
+					    		visibleImages[0].setX(500);
+					    		visibleImages[0].setY(300);
+
+					    		visibleImages[0].setScaleX(2);
+						        visibleImages[0].setScaleY(2);
+
+						        visibleImages[1].setX(700);
+						        visibleImages[1].setY(300);
+
+						        visibleImages[1].setScaleX(4);
+						        visibleImages[1].setScaleY(4);
+
+						        visibleImages[2].setX(900);
+						        visibleImages[2].setY(300);
+
+						        visibleImages[2].setScaleX(2);
+						        visibleImages[2].setScaleY(2);
+
+
+						        charSelectPane.getChildren().removeAll(heroName, heroClass, heroHP, heroDmg, heroActions);
+
+						        Label heroName = new Label("Name: " + visibleHeroes[1].getName());
+						        Label heroHP = new Label("Max HP: " + visibleHeroes[1].getMaxHp());
+						        Label heroDmg = new Label("Attack Damage: " + visibleHeroes[1].getAttackDmg());
+						        Label heroActions = new Label("Max Actions: " + visibleHeroes[1].getMaxActions());
+						        Label heroClass = null;
+
+						        if (visibleHeroes[1] instanceof Fighter)
+						        	heroClass = new Label("Class: Fighter");
+
+						        else if (visibleHeroes[1] instanceof Medic)
+						        	heroClass = new Label("Class: Medic");
+
+						        else if (visibleHeroes[1] instanceof Explorer)
+						        	heroClass = new Label("Class: Explorer");
+
+
+						        heroName.setFont(optionFont);
+						        heroHP.setFont(optionFont);
+						        heroDmg.setFont(optionFont);
+						        heroActions.setFont(optionFont);
+						        heroClass.setFont(optionFont);
+
+						        heroName.setTextFill(Color.WHITE);
+						        heroHP.setTextFill(Color.WHITE);
+						        heroDmg.setTextFill(Color.WHITE);
+						        heroActions.setTextFill(Color.WHITE);
+						        heroClass.setTextFill(Color.WHITE);
+
+
+						        heroName.setLayoutX(200);
+						        heroName.setLayoutY(500);
+
+						        heroClass.setLayoutX(650);
+						        heroClass.setLayoutY(500);
+
+						        heroHP.setLayoutX(200);
+						        heroHP.setLayoutY(610);
+
+						        heroDmg.setLayoutX(500);
+						        heroDmg.setLayoutY(610);
+
+						        heroActions.setLayoutX(920);
+						        heroActions.setLayoutY(610);
+
+
+						        charSelectPane.getChildren().clear();
+						        charSelectPane.getChildren().addAll(visibleImages[0],visibleImages[1], visibleImages[2], nextHero, prevHero, back, selectHero);
+						        charSelectPane.getChildren().addAll(heroName, heroClass, heroHP, heroDmg, heroActions);
+
+					    	}
+
+
+
+					    });
 
 
 
 
+					    prevHero.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle(Event e){
+					    		selectIndex = selectIndex - 1;
+					    		if (selectIndex < 0)
+					    			selectIndex = availableHeroes.size() - 1;
 
-				        charSelectRoot.getChildren().addAll(CharacterSelectionView, charSelectPane);
+					    		charSelectPane.getChildren().removeAll(heroName, heroClass, heroHP, heroDmg, heroActions);
+					    		charSelectPane.getChildren().removeAll(visibleImages[0],visibleImages[1], visibleImages[2]);
+
+					    		if (selectIndex == 0)
+						        	leftHero = availableHeroes.get(availableHeroes.size() - 1);
+
+						        else
+						        	leftHero = availableHeroes.get(selectIndex - 1);
+
+						        midHero = availableHeroes.get(selectIndex);
+						        rightHero = availableHeroes.get((selectIndex + 1) % availableHeroes.size());
 
 
+						        Hero[] visibleHeroes = {leftHero, midHero, rightHero};
+
+					    		for (int i = 0; i < 3; i++){
+									if (visibleHeroes[i] instanceof Explorer){
+							        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+							        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+
+									}
+
+									else if (visibleHeroes[i] instanceof Medic){
+										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+
+									}
+
+									else if (visibleHeroes[i] instanceof Fighter){
+										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+									}}
+
+
+					    		visibleImages[0].setX(500);
+					    		visibleImages[0].setY(300);
+
+					    		visibleImages[0].setScaleX(2);
+						        visibleImages[0].setScaleY(2);
+
+						        visibleImages[1].setX(700);
+						        visibleImages[1].setY(300);
+
+						        visibleImages[1].setScaleX(4);
+						        visibleImages[1].setScaleY(4);
+
+						        visibleImages[2].setX(900);
+						        visibleImages[2].setY(300);
+
+						        visibleImages[2].setScaleX(2);
+						        visibleImages[2].setScaleY(2);
+
+						        charSelectPane.getChildren().clear();
+						        charSelectPane.getChildren().addAll(visibleImages[0],visibleImages[1], visibleImages[2], nextHero, prevHero, back);
+
+
+						        Label heroName = new Label("Name: " + visibleHeroes[1].getName());
+						        Label heroHP = new Label("Max HP: " + visibleHeroes[1].getMaxHp());
+						        Label heroDmg = new Label("Attack Damage: " + visibleHeroes[1].getAttackDmg());
+						        Label heroActions = new Label("Max Actions: " + visibleHeroes[1].getMaxActions());
+						        Label heroClass = null;
+
+
+						        if (visibleHeroes[1] instanceof Fighter)
+						        	heroClass = new Label("Class: Fighter");
+
+						        else if (visibleHeroes[1] instanceof Medic)
+						        	heroClass = new Label("Class: Medic");
+
+						        else if (visibleHeroes[1] instanceof Explorer)
+						        	heroClass = new Label("Class: Explorer");
+
+
+						        heroName.setFont(optionFont);
+						        heroHP.setFont(optionFont);
+						        heroDmg.setFont(optionFont);
+						        heroActions.setFont(optionFont);
+						        heroClass.setFont(optionFont);
+
+						        heroName.setTextFill(Color.WHITE);
+						        heroHP.setTextFill(Color.WHITE);
+						        heroDmg.setTextFill(Color.WHITE);
+						        heroActions.setTextFill(Color.WHITE);
+						        heroClass.setTextFill(Color.WHITE);
+
+
+
+						        heroName.setLayoutX(200);
+						        heroName.setLayoutY(500);
+
+						        heroClass.setLayoutX(650);
+						        heroClass.setLayoutY(500);
+
+						        heroHP.setLayoutX(200);
+						        heroHP.setLayoutY(610);
+
+						        heroDmg.setLayoutX(500);
+						        heroDmg.setLayoutY(610);
+
+						        heroActions.setLayoutX(920);
+						        heroActions.setLayoutY(610);
+
+
+						        charSelectPane.getChildren().addAll(heroName, heroClass, heroHP, heroDmg, heroActions, selectHero);
+
+					    	}
+
+
+
+					    });
+
+					    //DEFAULT SELECTION////////////////////////////////////////////////////////////////
+
+
+
+						visibleImages[0].setX(500);
+			    		visibleImages[0].setY(300);
+
+			    		visibleImages[0].setScaleX(2);
+				        visibleImages[0].setScaleY(2);
+
+				        visibleImages[1].setX(700);
+				        visibleImages[1].setY(300);
+
+				        visibleImages[1].setScaleX(4);
+				        visibleImages[1].setScaleY(4);
+
+				        visibleImages[2].setX(900);
+				        visibleImages[2].setY(300);
+
+				        visibleImages[2].setScaleX(2);
+				        visibleImages[2].setScaleY(2);
+
+
+
+				        heroName.setLayoutX(200);
+				        heroName.setLayoutY(500);
+
+				        heroClass.setLayoutX(650);
+				        heroClass.setLayoutY(500);
+
+				        heroHP.setLayoutX(200);
+				        heroHP.setLayoutY(610);
+
+				        heroDmg.setLayoutX(500);
+				        heroDmg.setLayoutY(610);
+
+				        heroActions.setLayoutX(920);
+				        heroActions.setLayoutY(610);
+
+
+				        charSelectPane.getChildren().addAll(heroName, heroClass, heroHP, heroDmg, heroActions);
+				        charSelectPane.getChildren().addAll(back, visibleImages[0], visibleImages[1],visibleImages[2], nextHero, prevHero, selectHero);
+
+				        charSelectRoot.getChildren().addAll(CharacterSelectionView,  charSelectPane);
+
+				        ////////////////////////////////////////////////////////////////////////////////
 
 
 					    //double zoomFactor = 1.0;

@@ -15,6 +15,8 @@ public class Animations {
 	public Animations(){
 
 	}
+	
+	
 
 	public void attackDownFighter(Group group){
 		ArrayList<Image> images = new ArrayList<>();

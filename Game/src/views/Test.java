@@ -54,6 +54,7 @@ public class Test extends Application {
 
 	public static void main(String[] args){
 		launch(args);
+		System.out.println(-1 % 7);
 
 	}
 

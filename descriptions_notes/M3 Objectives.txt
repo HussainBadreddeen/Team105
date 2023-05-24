@@ -1,6 +1,17 @@
-1) HUD and Sounds, find assets
-2) Buttons and Map Placement
-3)Button audio clicks
-4) Animation for attack, move, special action
-5) Integration backend and frontend
-6) Fix Video
+Later
+1)Better buttons for selection
+3)Back button deselect
+4)visual effect for selection
+5)Animation
+6)QoL including better placements and looking GUI
+7)Functions for cleaning up the code
+8)Stop video when switching scene
+9)Add sounds to buttons when selecting and sound for selecting
+10) Play Sounds
+
+Now
+1) Start button after select
+2) Settings Scene
+3) Map + HUDs (Resources and placement)
+4) Integration of logic (move, attack, etc)
+5) Visible and not visible cells(Need fog of war resource)
