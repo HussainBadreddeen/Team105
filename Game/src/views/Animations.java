@@ -15,13 +15,11 @@ public class Animations {
 	public Animations(){
 
 	}
-	
-	
 
-	public void attackDownFighter(Group group){
+
+
+	public static void attackDownFighter(Group group){
 		ArrayList<Image> images = new ArrayList<>();
-
-
 
 		images.add(new Image("/tile012.png"));
         images.add(new Image("/tile013.png"));
@@ -59,7 +57,7 @@ public class Animations {
         		Duration.millis(200),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f2);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
 
         		}
         		));
@@ -68,7 +66,7 @@ public class Animations {
         		Duration.millis(200),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f2);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         		}
         		));
 
@@ -76,7 +74,7 @@ public class Animations {
         		Duration.millis(300),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f3);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         		}
         		));
 
@@ -84,7 +82,7 @@ public class Animations {
         		Duration.millis(400),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f4);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         		}
         		));
 
@@ -92,7 +90,7 @@ public class Animations {
         		Duration.millis(500),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f5);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         		}
         		));
 
@@ -100,7 +98,7 @@ public class Animations {
         		Duration.millis(600),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f6);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         		}
         		));
 
@@ -108,7 +106,7 @@ public class Animations {
         		Duration.millis(700),
         		(ActionEvent event) -> {
         			group.getChildren().setAll(f7);
-        			group.setTranslateY(group.getTranslateY() + 2);
+        			group.setTranslateY(group.getTranslateY());
         			group.setTranslateX(group.getTranslateX() + 64);
         			group.setTranslateY(group.getTranslateY() + 64);
         		}

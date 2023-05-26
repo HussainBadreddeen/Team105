@@ -1,17 +1,23 @@
-Later
-1)Better buttons for selection
-3)Back button deselect
-4)visual effect for selection
-5)Animation
-6)QoL including better placements and looking GUI
-7)Functions for cleaning up the code
-8)Stop video when switching scene
-9)Add sounds to buttons when selecting and sound for selecting
-10) Play Sounds
+1) Check Exceptions are correct (Done check again)
+2) Check win and gameover are correct
+3)turn back audio f w2tha
+4)zabat mute button (new image? and keda keda adjust place)
+5)attack damage icon (added to src)
 
-Now
-1) Start button after select
-2) Settings Scene
-3) Map + HUDs (Resources and placement)
-4) Integration of logic (move, attack, etc)
-5) Visible and not visible cells(Need fog of war resource)
+
+
+fazlka:
+
+adjust character select screen after choosing
+
+add sound effect
+
+add sound for game over
+
+add video for game over
+
+better exceptions (add font + picture + sound effect)
+
+add background audio during game
+
+Turn counterrrrr

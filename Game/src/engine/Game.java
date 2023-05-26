@@ -13,6 +13,7 @@ import model.characters.*; //we can use * instead of importing each indvidually
 import model.characters.Character;//for some reason we need this bec. the one above isnt working .how? * works for hero!!!
 import model.collectibles.*;
 import model.world.*;
+import views.SceneController;
 import exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -24,6 +25,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -33,7 +35,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.*;
@@ -308,6 +313,9 @@ public class Game extends Application {
 		        Hero leftHero;
 		        Hero midHero;
 		        Hero rightHero;
+		        Hero startHero = new Medic("a", 1, 1, 1);
+
+
 
 
 				public void start(Stage stage) {
@@ -326,6 +334,10 @@ public class Game extends Application {
 						Scene charSelectScene = new Scene(charSelectRoot, 1536, 864);
 						Pane charSelectPane = new Pane();
 
+						BorderPane playRoot = new BorderPane();
+						Scene playScene = new Scene(playRoot, 1536, 864);
+
+
 						Group settingsRoot = new Group();
 						Scene settingsScene = new Scene(settingsRoot, 1536, 864);
 
@@ -342,9 +354,8 @@ public class Game extends Application {
 					    Button settings = new Button("SETTINGS");
 					    Button exit = new Button("EXIT");
 
-					    //File mainMenuFile = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
-					    File mainMenuFile = new File("src/LastOfUsMenu.mp4");//relative path
-					    Media mainMenuVideo = new Media(mainMenuFile.toURI().toString());
+					    File mainMenuFile = new File("/C:/Users/nalaa/OneDrive/Desktop/GameAssets/LastOfUsMenu.mp4");//nadeem path
+						Media mainMenuVideo = new Media(mainMenuFile.toURI().toString());
 					    MediaPlayer mainMenuPlayer = new MediaPlayer(mainMenuVideo);
 					    MediaView mainMenuMV = new MediaView(mainMenuPlayer);
 
@@ -367,15 +378,10 @@ public class Game extends Application {
 
 
 
-//					    Font titleFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
-//					    Font optionFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
-//					    Font optionHoverFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
+					    Font titleFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 150);
+					    Font optionFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 75);
+					    Font optionHoverFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 85);
 
-						Font titleFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 150);
-						Font optionFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 75);
-					    Font optionHoverFont = Font.loadFont("file:C:/Users/hussa/Desktop/GameAssets/gameFont.ttf", 85);
-						
-						
 						Button back = new Button("BACK");
 						back.setFont(optionFont);
 						back.setTextFill(Color.WHITE);
@@ -458,6 +464,7 @@ public class Game extends Application {
 							    singleMultiPane.getChildren().addAll(title, exit);
 							    startRoot.getChildren().addAll(mainMenuMV, singleMultiPane);
 
+							    //SceneController.switchStartScene(stage);
 							    stage.setScene(startScene);
 					    		//stage.setScene(startScene); ******CHANGE SCENE
 
@@ -544,8 +551,7 @@ public class Game extends Application {
 
 
 
-				        //String songPath = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/The_Last_Of_us_Theme_song.mp3";
-					    String songPath = "src/The_Last_Of_us_Theme_song.mp3";//check
+				        String songPath = "/C:/Users/nalaa/OneDrive/Desktop/GameAssets/The_Last_Of_us_Theme_song.mp3";//relative path
 					    Media mediaSong = new Media(new File(songPath).toURI().toString());
 					    MediaPlayer songPlayer = new MediaPlayer(mediaSong);
 					    songPlayer.play();
@@ -704,8 +710,7 @@ public class Game extends Application {
 //				        });
 
 
-				        //loadHeroes("/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/Heros.csv");
-				        loadHeroes("/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/Heros.csv");
+				        loadHeroes("/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/Heros.csv");
 
 
 
@@ -721,6 +726,8 @@ public class Game extends Application {
 				        rightHero = availableHeroes.get((selectIndex + 1) % availableHeroes.size());
 
 				        Hero[] visibleHeroes = {leftHero, midHero, rightHero};
+
+
 
 				        Label heroName = new Label("Name: " + visibleHeroes[1].getName());
 				        Label heroHP = new Label("Max HP: " + visibleHeroes[1].getMaxHp());
@@ -750,40 +757,31 @@ public class Game extends Application {
 
 				        for (int i = 0; i < 3; i++){
 							if (visibleHeroes[i] instanceof Explorer){
-					        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
-					        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+					        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
 
 							}
 
 							else if (visibleHeroes[i] instanceof Medic){
-								//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
-								visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+								visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
 
 							}
 
 							else if (visibleHeroes[i] instanceof Fighter){
-								//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
-								visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+								visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
 
 							}}
 
 
-					    
-				        //ImageView nextHero = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/rightArrow.png"));
-					    ImageView nextHero = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/rightArrow.png"));
-				        nextHero.setLayoutX(1100);
-					    nextHero.setLayoutY(350);
-					    nextHero.setScaleX(5);
-					    nextHero.setScaleY(5);
+					    ImageView nextHero = new ImageView(new Image("/arrowLeft.png"));
+					    nextHero.setRotate(180);
+					    nextHero.setLayoutX(1100);
+					    nextHero.setLayoutY(320);
 					    nextHero.setStyle("-fx-background-color: transparent");
 
-					   // ImageView prevHero = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/rightArrow.png"));
-					    ImageView prevHero = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/rightArrow.png"));
-					    prevHero.setRotate(180);
+					    ImageView prevHero = new ImageView(new Image("/arrowLeft.png"));
+
 					    prevHero.setLayoutX(300);
-					    prevHero.setLayoutY(350);
-					    prevHero.setScaleX(5);
-					    prevHero.setScaleY(5);
+					    prevHero.setLayoutY(320);
 					    prevHero.setStyle("-fx-background-color: transparent");
 
 					    Button selectHero = new Button("SELECT");
@@ -800,9 +798,14 @@ public class Game extends Application {
 					    play.setLayoutX(1300);
 					    play.setLayoutY(750);
 
+
+
 					    play.setOnMouseClicked(new EventHandler <Event>(){
 					    	public void handle(Event e){
-					    		//CHANGE SCENE PAUSE MV
+					    		charSelectRoot.getChildren().clear();
+					    		//stage.setScene(playScene);
+
+					    		songPlayer.pause();
 
 					    	}
 
@@ -827,18 +830,13 @@ public class Game extends Application {
 					    });
 
 
-					    selectHero.setOnMouseClicked(new EventHandler <Event>(){
-					    	public void handle(Event e){
-					    		heroes.add(visibleHeroes[1]);
-					    		charSelectPane.getChildren().removeAll(nextHero, prevHero);
-					    		charSelectPane.getChildren().add(play);
-					    	}
 
-					    });
 
-					    selectHero.setOnMouseEntered(new EventHandler <Event>(){
+
+					    nextHero.setOnMouseEntered(new EventHandler <Event>(){
 					    	public void handle (Event event){
-					    		selectHero.setFont(optionHoverFont);
+					    		nextHero.setScaleX(1.1);
+					    		nextHero.setScaleY(1.1);
 					    		hoverSoundPlayer.play();
 					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
 
@@ -846,13 +844,15 @@ public class Game extends Application {
 					    	}
 					    });
 
-					    selectHero.setOnMouseExited(new EventHandler <Event>(){
+					    nextHero.setOnMouseExited(new EventHandler <Event>(){
 					    	public void handle (Event event){
-					    		selectHero.setFont(optionFont);
+					    		nextHero.setScaleX(1);
+					    		nextHero.setScaleY(1);
 
 
 					    	}
 					    });
+
 
 
 					    nextHero.setOnMouseClicked(new EventHandler <Event>(){
@@ -860,6 +860,7 @@ public class Game extends Application {
 					    		selectIndex = (selectIndex + 1) % availableHeroes.size();
 
 					    		//charSelectPane.getChildren().removeAll(visibleImages[0],visibleImages[1], visibleImages[2]);
+
 
 
 					    		if (selectIndex == 0)
@@ -878,18 +879,19 @@ public class Game extends Application {
 
 					    		for (int i = 0; i < 3; i++){
 									if (visibleHeroes[i] instanceof Explorer){
-							        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));}
-						        		visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));}
+							        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));}
 
 									else if (visibleHeroes[i] instanceof Medic){
-										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));}
-										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));}
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));}
 
 									else if (visibleHeroes[i] instanceof Fighter){
-										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));}}
-										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));}}
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));}}
 
 					    		charSelectPane.getChildren().addAll(visibleImages[0],visibleImages[1], visibleImages[2]);
+
+
+
+
 
 					    		visibleImages[0].setX(500);
 					    		visibleImages[0].setY(300);
@@ -956,6 +958,36 @@ public class Game extends Application {
 						        heroActions.setLayoutX(920);
 						        heroActions.setLayoutY(610);
 
+						        selectHero.setOnMouseClicked(new EventHandler <Event>(){
+							    	public void handle(Event e){
+							    		GlobalVariableController.setStartHero(visibleHeroes[1]);
+							    		System.out.println((GlobalVariableController.getStartHero().getName()));
+							    		charSelectPane.getChildren().removeAll(nextHero, prevHero);
+							    		charSelectPane.getChildren().add(play);
+							    		startGame(GlobalVariableController.getStartHero());
+							    	}
+
+							    });
+
+							    selectHero.setOnMouseEntered(new EventHandler <Event>(){
+							    	public void handle (Event event){
+							    		selectHero.setFont(optionHoverFont);
+							    		hoverSoundPlayer.play();
+							    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+							    	}
+							    });
+
+							    selectHero.setOnMouseExited(new EventHandler <Event>(){
+							    	public void handle (Event event){
+							    		selectHero.setFont(optionFont);
+
+
+							    	}
+							    });
+
+
 
 						        charSelectPane.getChildren().clear();
 						        charSelectPane.getChildren().addAll(visibleImages[0],visibleImages[1], visibleImages[2], nextHero, prevHero, back, selectHero);
@@ -965,6 +997,27 @@ public class Game extends Application {
 
 
 
+					    });
+
+
+					    prevHero.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		prevHero.setScaleX(1.1);
+					    		prevHero.setScaleY(1.1);
+					    		hoverSoundPlayer.play();
+					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+					    	}
+					    });
+
+					    prevHero.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		prevHero.setScaleX(1);
+					    		prevHero.setScaleY(1);
+
+
+					    	}
 					    });
 
 
@@ -993,20 +1046,18 @@ public class Game extends Application {
 
 					    		for (int i = 0; i < 3; i++){
 									if (visibleHeroes[i] instanceof Explorer){
-							        	//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
-							        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
+							        	visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/ExpMoveDown0.png"));
 
 									}
 
 									else if (visibleHeroes[i] instanceof Medic){
-										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
-										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/MedMoveDown0.png"));
 
 									}
 
 									else if (visibleHeroes[i] instanceof Fighter){
-										//visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
-										visibleImages[i] = new ImageView(new Image("file:/C:/Users/hussa/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+										visibleImages[i] = new ImageView(new Image("file:/C:/Users/nalaa/OneDrive/Desktop/Team105/GameAssets/useful/charSelec/FtmoveDown0.png"));
+
 									}}
 
 
@@ -1078,6 +1129,36 @@ public class Game extends Application {
 						        heroActions.setLayoutX(920);
 						        heroActions.setLayoutY(610);
 
+						        selectHero.setOnMouseClicked(new EventHandler <Event>(){
+							    	public void handle(Event e){
+							    		GlobalVariableController.setStartHero(visibleHeroes[1]);
+							    		System.out.println((GlobalVariableController.getStartHero().getName()));
+							    		charSelectPane.getChildren().removeAll(nextHero, prevHero);
+							    		charSelectPane.getChildren().add(play);
+							    		startGame(GlobalVariableController.getStartHero());
+							    	}
+
+							    });
+
+							    selectHero.setOnMouseEntered(new EventHandler <Event>(){
+							    	public void handle (Event event){
+							    		selectHero.setFont(optionHoverFont);
+							    		hoverSoundPlayer.play();
+							    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+							    	}
+							    });
+
+							    selectHero.setOnMouseExited(new EventHandler <Event>(){
+							    	public void handle (Event event){
+							    		selectHero.setFont(optionFont);
+
+
+							    	}
+							    });
+
+
 
 						        charSelectPane.getChildren().addAll(heroName, heroClass, heroHP, heroDmg, heroActions, selectHero);
 
@@ -1086,6 +1167,9 @@ public class Game extends Application {
 
 
 					    });
+
+
+
 
 					    //DEFAULT SELECTION////////////////////////////////////////////////////////////////
 
@@ -1111,6 +1195,8 @@ public class Game extends Application {
 
 
 
+
+
 				        heroName.setLayoutX(200);
 				        heroName.setLayoutY(500);
 
@@ -1127,6 +1213,36 @@ public class Game extends Application {
 				        heroActions.setLayoutY(610);
 
 
+				        selectHero.setOnMouseClicked(new EventHandler <Event>(){
+					    	public void handle(Event e){
+					    		GlobalVariableController.setStartHero(visibleHeroes[1]);
+					    		System.out.println((GlobalVariableController.getStartHero().getName()));
+					    		charSelectPane.getChildren().removeAll(nextHero, prevHero);
+					    		charSelectPane.getChildren().add(play);
+					    		startGame(GlobalVariableController.getStartHero());
+					    	}
+
+					    });
+
+					    selectHero.setOnMouseEntered(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		selectHero.setFont(optionHoverFont);
+					    		hoverSoundPlayer.play();
+					    		hoverSoundPlayer.seek(hoverSoundPlayer.getStartTime());
+
+
+					    	}
+					    });
+
+					    selectHero.setOnMouseExited(new EventHandler <Event>(){
+					    	public void handle (Event event){
+					    		selectHero.setFont(optionFont);
+
+
+					    	}
+					    });
+
+
 				        charSelectPane.getChildren().addAll(heroName, heroClass, heroHP, heroDmg, heroActions);
 				        charSelectPane.getChildren().addAll(back, visibleImages[0], visibleImages[1],visibleImages[2], nextHero, prevHero, selectHero);
 
@@ -1135,6 +1251,238 @@ public class Game extends Application {
 				        ////////////////////////////////////////////////////////////////////////////////
 
 
+
+				        //PLAY/////////////////////////////////////////////////////////////////////////////]
+
+
+
+
+				        ImageView map = new ImageView(new Image("/FINALMAP.png", 956, 864, false, false));
+				        ImageView leftHUD = new ImageView(new Image("/sideHUD.png", 290, 864, false, false));
+				        ImageView rightHUD = new ImageView(new Image("/sideHUD.png", 290, 864, false, false));
+				        ImageView specialAction = new ImageView(new Image("/IconSpecialFt.png", 100, 100, false, false));
+				        ImageView cureAction = new ImageView(new Image("/IconCure.png", 100, 100, false, false));
+				        ImageView attackAction = new ImageView(new Image("/IconAttack.png", 100, 100, false, false));
+				        ImageView target = new ImageView(new Image("/IconTarget.png", 100, 100, false, false));
+
+				        ImageView moveLeft = new ImageView(new Image("/arrowLeft.png", 100, 100, false, false));
+				        ImageView moveRight = new ImageView(new Image("/arrowLeft.png", 100, 100, false, false));
+				        ImageView moveUp = new ImageView(new Image("/arrowLeft.png", 100, 100, false, false));
+				        ImageView moveDown = new ImageView(new Image("/arrowLeft.png", 100, 100, false, false));
+
+
+
+				        moveRight.setRotate(180);
+				        moveUp.setRotate(90);
+				        moveDown.setRotate(270);
+
+				        ImageView hero1 = new ImageView(new Image("/ExpMoveDown0.png", 40, 40, false, false));
+				        System.out.println(GlobalVariableController.getStartHero().getName());
+
+				        if (GlobalVariableController.getStartHero() instanceof Fighter){
+				        	hero1 = new ImageView(new Image("/FtmoveDown0.png", 40, 40, false, false));
+
+				        	}
+				        else if (GlobalVariableController.getStartHero() instanceof Medic){
+				        	hero1 = new ImageView(new Image("/MedMoveDown0.png", 40, 40, false, false));}
+
+
+
+
+
+
+
+
+				        rightHUD.setRotate(180);
+
+				        playRoot.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(0), Insets.EMPTY)));
+
+					    Font HUDFont = Font.loadFont("file:C:/Users/nalaa/OneDrive/Desktop/GameAssets/gameFont.ttf", 60);
+
+
+				        Text cureLabel = new Text("CURE");
+				        cureLabel.setFont(HUDFont);
+				        cureLabel.setFill(Color.WHITE);
+				        cureLabel.setLayoutX(130);
+				        cureLabel.setLayoutY(110);
+
+				        Text attackLabel = new Text("ATTACK");
+				        attackLabel.setFont(HUDFont);
+				        attackLabel.setFill(Color.WHITE);
+				        attackLabel.setLayoutX(130);
+				        attackLabel.setLayoutY(235);
+
+				        Text specialLabel = new Text("SPECIAL");
+				        specialLabel.setFont(HUDFont);
+				        specialLabel.setFill(Color.WHITE);
+				        specialLabel.setLayoutX(130);
+				        specialLabel.setLayoutY(360);
+
+				        Text targetLabel = new Text("TARGET");
+				        targetLabel.setFont(HUDFont);
+				        targetLabel.setFill(Color.WHITE);
+				        targetLabel.setLayoutX(130);
+				        targetLabel.setLayoutY(485);
+
+				        cureAction.setX(18);
+				        cureAction.setY(35);
+
+				        attackAction.setX(18);
+				        attackAction.setY(160);
+
+				        specialAction.setX(18);
+				        specialAction.setY(285);
+
+				        target.setX(18);
+				        target.setY(410);
+
+				        moveUp.setX(80);
+				        moveUp.setY(600);
+
+				        moveDown.setX(80);
+				        moveDown.setY(750);
+
+				        moveRight.setX(160);
+				        moveRight.setY(675);
+
+				        moveLeft.setX(0);
+				        moveLeft.setY(675);
+
+
+
+				        hero1.setX(545);
+				        hero1.setY(175);
+
+				        hero1.setX(545 + 29 );
+				        hero1.setY(175 + 31 * 14);
+
+
+				        cureAction.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		cureAction.setScaleX(1.1);
+				        		cureAction.setScaleY(1.1);
+				        	}
+				        });
+
+				        cureAction.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		cureAction.setScaleX(1);
+				        		cureAction.setScaleY(1);
+				        	}
+				        });
+
+				        attackAction.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		attackAction.setScaleX(1.1);
+				        		attackAction.setScaleY(1.1);
+				        	}
+				        });
+
+				        attackAction.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		attackAction.setScaleX(1);
+				        		attackAction.setScaleY(1);
+				        	}
+				        });
+
+				        specialAction.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		specialAction.setScaleX(1.1);
+				        		specialAction.setScaleY(1.1);
+				        	}
+				        });
+
+				        specialAction.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		specialAction.setScaleX(1);
+				        		specialAction.setScaleY(1);
+				        	}
+				        });
+
+				        target.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		target.setScaleX(1.1);
+				        		target.setScaleY(1.1);
+				        	}
+				        });
+
+				        target.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		target.setScaleX(1);
+				        		target.setScaleY(1);
+				        	}
+				        });
+
+				        moveUp.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveUp.setScaleX(1.1);
+				        		moveUp.setScaleY(1.1);
+				        	}
+				        });
+
+				        moveUp.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveUp.setScaleX(1);
+				        		moveUp.setScaleY(1);
+				        	}
+				        });
+
+				        moveDown.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveDown.setScaleX(1.1);
+				        		moveDown.setScaleY(1.1);
+				        	}
+				        });
+
+				        moveDown.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveDown.setScaleX(1);
+				        		moveDown.setScaleY(1);
+				        	}
+				        });
+
+				        moveRight.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveRight.setScaleX(1.1);
+				        		moveRight.setScaleY(1.1);
+				        	}
+				        });
+
+				        moveRight.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveRight.setScaleX(1);
+				        		moveRight.setScaleY(1);
+				        	}
+				        });
+
+				        moveLeft.setOnMouseEntered(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveLeft.setScaleX(1.1);
+				        		moveLeft.setScaleY(1.1);
+				        	}
+				        });
+
+				        moveLeft.setOnMouseExited(new EventHandler <Event>(){
+				        	public void handle(Event e){
+				        		moveLeft.setScaleX(1);
+				        		moveLeft.setScaleY(1);
+				        	}
+				        });
+
+
+
+
+
+
+
+
+				        playRoot.setLeft(leftHUD);
+				        playRoot.setRight(rightHUD);
+				        playRoot.setCenter(map);
+				        playRoot.getChildren().addAll(specialAction, attackAction, cureAction, target, hero1, moveUp, moveDown, moveRight, moveLeft, cureLabel, attackLabel, specialLabel, targetLabel);
+
+
+				        //////////////////////////////////////////////////////////////////////////////////
 					    //double zoomFactor = 1.0;
 
 						//Settings
@@ -1170,7 +1518,7 @@ public class Game extends Application {
 
 					    //start scene
 
-					    ImageView map = new ImageView(new Image("/map.png", 1000, 1000, false, false));
+
 					    //startRoot.getChildren().add(map);
 					  // startRoot.getChildren().add(map);
 

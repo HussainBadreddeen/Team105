@@ -42,7 +42,7 @@ public class Vaccine implements Collectible{
 			}
 		
 		else
-			throw new NoAvailableResourcesException("You dont have enough actions to cure!");
+			 throw new NoAvailableResourcesException("You dont have enough Vaccines to cure!");
 		
 	}
 
