@@ -6,4 +6,4 @@ Nadeem Mohareb 55-18844    BI19
 Adham Abdelwahab 55-4272 MCTR31
 
 
-I would like to thank ma boyysss for collaborating and building this together especially nadeem our backbone
+I would like to thank ma boyysss for collaborating and building this together 
